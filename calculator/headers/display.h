@@ -8,6 +8,7 @@
 namespace display {
 	void begin();
 	void addCmd(char);
+	void addCmd(int);
 	void printAns(char const*);
 	void printAns(int);
 	void clear();

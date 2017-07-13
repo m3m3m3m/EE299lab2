@@ -1,7 +1,8 @@
 
 #include "Arduino.h"
-#include <LiquidCrystal.h>
+
 #include "../headers/display.h"
+#include "../headers/constant.h"
 
 namespace phase {
 	namespace phase1 {
@@ -12,7 +13,7 @@ namespace phase {
 		void setup() {
 		  // put your setup code here, to run once:
 		  display::begin();
-		  Serial.begin(9600);
+		  Serial.begin(BAUD_RATE);
 		}
 
 		void loop() {
