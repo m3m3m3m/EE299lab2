@@ -7,7 +7,7 @@
 
 namespace display {
 	void init();
-	void addCmd(char*);
+	void addCmd(char);
 	void printAns(char*);
 	void clear();
 }

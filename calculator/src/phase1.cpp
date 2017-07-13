@@ -24,11 +24,10 @@ namespace phase {
 			switch(crtstep)
 			{
 			  case 0:
-			  lcd.clear();
-			  lcd.setCursor(5,0);
+			  display::clear();
 			  op_a = incomingByte-48;
 			  Serial.print(op_a);
-			  lcd.print(op_a);
+			  display::addCmd(op_a);
 			  break;
 			  case 1:
 			  opr = (char) incomingByte;
