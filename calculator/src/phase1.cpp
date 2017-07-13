@@ -1,87 +1,97 @@
 
 #include "Arduino.h"
 
+#include "../headers/utils.h"
 #include "../headers/display.h"
 #include "../headers/constant.h"
 
 namespace phase {
 	namespace phase1 {
-
-		int op_a,op_b,incomingByte = 0,crtstep = 0,res;
-		int calc(int, int, char);
+		int op_a;
+		int op_b;
 		char opr;
+		int step = 0;
+
 		void setup() {
-		  // put your setup code here, to run once:
-		  display::begin();
-		  Serial.begin(BAUD_RATE);
+			display::begin();
+			prompt();
 		}
 
-		void loop() {
-		  // put your main code here, to run repeatedly:
-		  if(Serial.available()>0){
-			// read the incoming byte:
-			incomingByte = Serial.read();
-			switch(crtstep)
-			{
-			  case 0:
-			  display::clear();
-			  op_a = incomingByte-48;
-			  Serial.print(op_a);
-			  display::addCmd(op_a);
-			  break;
-			  case 1:
-			  opr = (char) incomingByte;
-			  Serial.print(opr);
-			  display::addCmd(' ');
-			  display::addCmd(opr);
-			  break;
-			  case 2:
-			  op_b = incomingByte-48;
-			  Serial.print(op_b);
-			  display::addCmd(' ');
-			  display::addCmd(op_b);
-			  break;
-			  case 3:
-			  display::addCmd(' ');
-			  display::addCmd('=');
-			  if('/' == opr and op_b == 0)
-			  {
-				display::printAns("Divided by zero!");
-				Serial.println("Divided by zero!");
-			  }
-			  else
-			  {      
-				res = calc(op_a,op_b,opr);
-				Serial.print("=");
-				Serial.println(res); 
-				display::printAns(res);
-			  }
-			  break;
+		int inputOpA();
+		int inputOpr();
+		int inputOpB();
+		int inputEqu();
+
+		int loop() {
+			if (Serial.available() > 0) {
+				switch(step) {
+					case 0: step = inputOpA(); break;
+					case 1: step = inputOpr(); break;
+					case 2: step = inputOpB(); break;
+					case 3: step = inputEqu(); break;
+				}
+				if (step == 0) {
+					prompt();
+				}
 			}
-			crtstep = crtstep + 1;
-			if(4 == crtstep) crtstep = 0;
-		  }
 		}
 
-		int calc(int a,int b,char op)
-		{
-		  int res = 0;
-		  switch(op)
-		  {
-			case '+':
-			res = a + b;
-			break;
-			case '-':
-			res = a - b;
-			break;
-			case '*':
-			res = a * b;
-			break;
-			case '/':
-			res = a / b;
-			break;
-		  }
-		  return res;
+		int inputOpA() {
+			char incomingByte = Serial.read();
+			display::clear();
+			if (isDigit(incomingByte)) {
+				display::addCmd(incomingByte);
+				op_a = (int)(incomingByte - '0');
+				return 1;
+			} else {
+				display::printErr("Invalid Digit");
+				return 0;
+			}
+		}
+
+		int inputOpr() {
+			char incomingByte = Serial.read();
+			if (isOpr(incomingByte)) {
+				display::addCmd(' ');
+				display::addCmd(incomingByte);
+				opr = incomingByte;
+				return 2;
+			} else {
+				display::printErr("Invalid Operator");
+				return 0;
+			}
+		}
+
+		int inputOpB() {
+			char incomingByte = Serial.read();
+			if (isDigit(incomingByte)) {
+				display::addCmd(' ');
+				display::addCmd(incomingByte);
+				op_b = (int)(incomingByte - '0');
+				return 3;
+			} else {
+				display::printErr("Invalid Digit");
+				return 0;
+			}
+		}
+
+		int inputEqu() {
+			char incomingByte = Serial.read();
+			if (incomingByte == '=') {
+				display::addCmd(' ');
+				display::addCmd(incomingByte);
+				if (op_b == 0 && opr == '/') {
+					display::printErr("Divided by Zero");
+					return 0;
+				} else {
+					int ans = calc(op_a, op_b, opr);
+					display::printAns(ans);
+					return 0;
+				}
+			} else {
+				display::printErr("Invalid Equ Sign");
+				return 0;
+			}
 		}
 	}
 }

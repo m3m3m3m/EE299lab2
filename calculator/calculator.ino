@@ -6,6 +6,7 @@
 #if PHASE == 0
 
 void setup() {
+	Serial.begin(BAUD_RATE);
     test::setup();
 }
 
@@ -16,6 +17,7 @@ void loop() {
 #else
 
 void setup() {
+	Serial.begin(BAUD_RATE);
     phase::setup();
 }
 

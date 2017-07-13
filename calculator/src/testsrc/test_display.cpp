@@ -3,19 +3,20 @@
 #include "../../headers/display.h"
 #include "../../headers/test.h"
 
-using display::begin;
-using display::addCmd;
+using namespace display;
 
 namespace test { 
 	namespace display {
-
 		void setup() {
 			begin();
 		}
 
 		void loop() {
-			addCmd('x');
-			delay(1000);
+			for (int i = 0; i < 7; i++)
+				addCmd('i');
+			printErr("1234567890");
+			delay(10000);
+			clear();
 		}
 	}
 }
