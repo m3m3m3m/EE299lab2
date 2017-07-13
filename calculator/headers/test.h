@@ -15,7 +15,7 @@ namespace test {
 	
 	using display::setup;
 	using display::loop;
-
+	
 	#endif	// TEST
 }
 
