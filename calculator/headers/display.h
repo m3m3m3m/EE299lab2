@@ -2,18 +2,14 @@
 #ifndef DISPLAY_H
 #define DISPLAY_H
 
+#include <LiquidCrystal.h>
+#include "../headers/constant.h"
+
 namespace display {
-	void test();
+	void init();
+	void addCmd(char*);
+	void printAns(char*);
+	void clear();
 }
-/*
-namespace test {
-	namespace display {
-		void setup() {
 
-		}
-
-		void loop() {}
-	}
-}
-*/
 #endif

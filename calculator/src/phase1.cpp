@@ -1,13 +1,18 @@
+
 #include "Arduino.h"
 #include <LiquidCrystal.h>
+#include "../headers/display.h"
+
 namespace phase {
 	namespace phase1 {
-		LiquidCrystal lcd(2, 3, 4, 5, 6, 7, 8);     // Bus 1 of the Seeduino sensor Chasis
+		extern LiquidCrystal display::lcd;
+
 		int op_a,op_b,incomingByte = 0,crtstep = 0,res;
+		int calc(int, int, char);
 		char opr;
 		void setup() {
 		  // put your setup code here, to run once:
-		  lcd.begin(16, 2);
+		  display::init();
 		  Serial.begin(9600);
 		}
 
@@ -80,6 +85,5 @@ namespace phase {
 		  }
 		  return res;
 		}
-
 	}
 }

@@ -3,7 +3,10 @@
 #include "Arduino.h"
 
 namespace display {
-	void test() {
-		
+	LiquidCrystal lcd(LCD_PORT);
+	void init() {
+		lcd.begin(16, 2);
 	}
+
+	
 }
