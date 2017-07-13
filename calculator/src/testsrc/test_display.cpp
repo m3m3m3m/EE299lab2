@@ -1,20 +1,17 @@
 
 #include "Arduino.h"
+#include "../../headers/display.h"
 #include "../../headers/test.h"
 
 namespace test { 
 	namespace display {
-		
-		int led = 10;
 
 		void setup() {
-			pinMode(led, OUTPUT);
+			display::init();
 		}
 
 		void loop() {
-			digitalWrite(led, HIGH);
-			delay(1000);
-			digitalWrite(led, LOW);
+			display::addCmd("x");
 			delay(1000);
 		}
 	}
