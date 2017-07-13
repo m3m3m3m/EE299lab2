@@ -3,15 +3,18 @@
 #include "../../headers/display.h"
 #include "../../headers/test.h"
 
+using display::begin;
+using display::addCmd;
+
 namespace test { 
 	namespace display {
 
 		void setup() {
-			display::init();
+			begin();
 		}
 
 		void loop() {
-			display::addCmd("x");
+			addCmd('x');
 			delay(1000);
 		}
 	}

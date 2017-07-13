@@ -5,14 +5,13 @@
 
 namespace phase {
 	namespace phase1 {
-		extern LiquidCrystal display::lcd;
 
 		int op_a,op_b,incomingByte = 0,crtstep = 0,res;
 		int calc(int, int, char);
 		char opr;
 		void setup() {
 		  // put your setup code here, to run once:
-		  display::init();
+		  display::begin();
 		  Serial.begin(9600);
 		}
 
@@ -32,21 +31,21 @@ namespace phase {
 			  case 1:
 			  opr = (char) incomingByte;
 			  Serial.print(opr);
-			  lcd.print(' ');
-			  lcd.print(opr);
+			  display::addCmd(' ');
+			  display::addCmd(opr);
 			  break;
 			  case 2:
 			  op_b = incomingByte-48;
 			  Serial.print(op_b);
-			  lcd.print(' ');
-			  lcd.print(op_b);
+			  display::addCmd(' ');
+			  display::addCmd(op_b);
 			  break;
 			  case 3:
-			  lcd.print(" =");
-			  lcd.setCursor(0, 1);
+			  display::addCmd(' ');
+			  display::addCmd('=');
 			  if('/' == opr and op_b == 0)
 			  {
-				lcd.print("Divided by zero!");
+				display::printAns("Divided by zero!");
 				Serial.println("Divided by zero!");
 			  }
 			  else
@@ -54,8 +53,7 @@ namespace phase {
 				res = calc(op_a,op_b,opr);
 				Serial.print("=");
 				Serial.println(res); 
-				lcd.setCursor(7,1);
-				lcd.print(res);
+				display::printAns(res);
 			  }
 			  break;
 			}

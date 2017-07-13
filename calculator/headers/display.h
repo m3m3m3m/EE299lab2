@@ -6,9 +6,10 @@
 #include "../headers/constant.h"
 
 namespace display {
-	void init();
+	void begin();
 	void addCmd(char);
-	void printAns(char*);
+	void printAns(char const*);
+	void printAns(int);
 	void clear();
 }
 
