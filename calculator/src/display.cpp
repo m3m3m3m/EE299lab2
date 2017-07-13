@@ -13,7 +13,7 @@ namespace display {
 
 	void addCmd(char input) {
 		pos++;
-		if(pos % 2 == 0) lcd.scrollDisplayLeft();
+		if(pos != 1 && pos % 2 == 1) lcd.scrollDisplayLeft();
 		//lcd.setCursor(pos/2+7,0);
 		lcd.print(input);
 	}
