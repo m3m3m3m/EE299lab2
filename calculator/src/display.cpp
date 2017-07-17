@@ -56,26 +56,82 @@ namespace display {
 		Serial.print(input);				// print the input char to the serial monitor
 	}
 	
+	//-----------------------------------------------------------  
+	// printErr 
+	//  
+	// Purpose:  
+	//    print error information on the lcd  
+	//  
+	// Parameters:  
+	//    [in] char* - the char array (contains error info) to be 
+	//				   printed on the second line of lcd
+	//  
+	// Returns:  
+	//    void  
+	// 
+	// Author:  
+	//    Mingxiao An, Man Sun, Muhan Li
+	//  Rev.0 12 July 2017
+	//  Rev.1 13 July 2017
+	//  Rev.2 16 July 2017
+	//----------------------------------------------------------- 
 	void printErr(char const * output) {
 		lcd.setCursor(shift + 8 - strlen(output) / 2, 1);
-		lcd.print(output);
-		Serial.println("");
-		Serial.println(output);
+											// set the cursor according to the length of the char array 
+		lcd.print(output);					// print the error information on the lcd
+		Serial.println("");					// print on a new line of serial monitor
+		Serial.println(output);				// print the error information on the serial monitor
 	}
 
+	//-----------------------------------------------------------  
+	// printAns 
+	//  
+	// Purpose:  
+	//    print the result of calculation on lcd 
+	//  
+	// Parameters:  
+	//    [in] int - the result to be printed on the lcd
+	//  
+	// Returns:  
+	//    void  
+	// 
+	// Author:  
+	//    Mingxiao An, Man Sun, Muhan Li
+	//  Rev.0 12 July 2017
+	//  Rev.1 13 July 2017
+	//  Rev.2 16 July 2017
+	//----------------------------------------------------------- 
 	void printAns(int output) {
-		char buf[32];
-		sprintf(buf, "%d", output);//returns the length of output
+		char buf[32];						// initialize a buffer to store result message
+		sprintf(buf, "%d", output);			// push the integer as a string into the buffer
 		lcd.setCursor(shift + 8 - strlen(buf) / 2, 1);
-		//lcd.setCursor(shift + 8 - sprintf(buf,"%d",output) / 2, 1);
-		lcd.print(buf);
-		Serial.println(output);
+											// set the cursor according to the length of result
+		lcd.print(buf);						// print the result stored in the buffer to lcd 
+		Serial.println(output);				// print the integer result to the serial monitor
 	}
 
+	//-----------------------------------------------------------  
+	// clear
+	//  
+	// Purpose:  
+	//    clear all the content on lcd and set to the initial state 
+	//  
+	// Parameters:  
+	//    void
+	//  
+	// Returns:  
+	//    void  
+	// 
+	// Author:  
+	//    Mingxiao An, Man Sun, Muhan Li
+	//  Rev.0 12 July 2017
+	//  Rev.1 13 July 2017
+	//  Rev.2 16 July 2017
+	//----------------------------------------------------------- 
 	void clear() {
-		lcd.clear();
-		lcd.setCursor(7, 0);
-		count = 0, shift = 0;
+		lcd.clear();						// clear all the content on lcd and scroll back to initial					
+		lcd.setCursor(7, 0);				// set the cursor to the beginnig point of input
+		count = 0, shift = 0;				// set to initial value
 	}
 	
 }
