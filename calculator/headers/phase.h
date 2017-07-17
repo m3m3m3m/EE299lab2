@@ -1,4 +1,17 @@
-
+//----------------------------------------------------------------
+// Module name:
+//    phase.h
+// Languange:
+//    C++
+// Description:
+//    This header provides options for different useages of this 
+//	  module, including three demo phases.
+// Author:
+//	  Mingxiao An, Man Sun, Muhan Li
+//	Rev.0 12 July 2017
+//  Rev.1 13 July 2017
+//  Rev.2 16 July 2017
+//----------------------------------------------------------------
 #ifndef PHASE_H
 #define PHASE_H
 

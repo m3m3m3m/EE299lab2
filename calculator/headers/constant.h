@@ -1,13 +1,16 @@
 //----------------------------------------------------------------
-//  Module name:
-//      constant.h
-//  Languange:
-//      C++
-//  Description:
-//      This header defines constants used in the program, such us
-//		pin numbers, baud rate, and other constant values.
-//  Author:
-//  	Rev.0 12 July 2017 by Mingxiao An
+// Module name:
+//    constant.h
+// Languange:
+//    C++
+// Description:
+//    This header defines constants used in the program, such as
+//	  pin numbers, baud rate, and other constant values.
+// Author:
+//	  Mingxiao An, Man Sun, Muhan Li
+//	Rev.0 12 July 2017
+//  Rev.1 13 July 2017
+//  Rev.2 16 July 2017
 //----------------------------------------------------------------
 
 #ifndef CONSTANT_H

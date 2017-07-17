@@ -1,14 +1,14 @@
 //----------------------------------------------------------------
-//  Module name:
-//      calculator.ino
-//  Languange:
-//      Wiring/Arduino
-//  Description:
-//      The program takes user's input from the Serial Monitor and
-//      prints the input and result on a LCD.
-//  Author:
-//      Mingxiao An, Man Sun, Muhan Li
-//  Rev.0 12 July 2017
+// Module name:
+//    calculator.ino
+// Languange:
+//    Wiring/Arduino
+// Description:
+//    The program takes user's input from the Serial Monitor and
+//	  prints the input and result on a LCD.
+// Author:
+//	  Mingxiao An, Man Sun, Muhan Li
+//	Rev.0 12 July 2017
 //  Rev.1 13 July 2017
 //  Rev.2 16 July 2017
 //----------------------------------------------------------------

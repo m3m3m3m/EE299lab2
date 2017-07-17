@@ -22,6 +22,21 @@ namespace display {
 	int count;							// to store the number of the characters already input
 	int shift;							// to store how many times the lcd scrolls left
 	
+	//-----------------------------------------------------------  
+	// begin
+	//  
+	// Purpose:  
+	//    initialize some local variables and prepare for the display
+	// Parameters:  
+	//    void  
+	// Returns:  
+	//    void  
+	// Author:  
+	//    Mingxiao An, Man Sun, Muhan Li
+	//  Rev.0 12 July 2017
+	//  Rev.1 13 July 2017
+	//  Rev.2 16 July 2017
+	//-----------------------------------------------------------  
 	void begin() {
 		lcd.begin(16, 2);				// 16 * 2 characters
 		count = 0, shift = 0;			// initialize to zero
