@@ -32,14 +32,11 @@ namespace display {
 	// addCmd 
 	//  
 	// Purpose:  
-	//    add one character to the lcd as input  
-	//  
+	//    add one character to the lcd as input   
 	// Parameters:  
 	//    [in] char - the character to be printed on the screen  
-	//  
 	// Returns:  
 	//    void  
-	// 
 	// Author:  
 	//    Mingxiao An, Man Sun, Muhan Li
 	//  Rev.0 12 July 2017
@@ -58,17 +55,14 @@ namespace display {
 	
 	//-----------------------------------------------------------  
 	// printErr 
-	//  
+	//
 	// Purpose:  
 	//    print error information on the lcd  
-	//  
 	// Parameters:  
 	//    [in] char* - the char array (contains error info) to be 
 	//				   printed on the second line of lcd
-	//  
 	// Returns:  
 	//    void  
-	// 
 	// Author:  
 	//    Mingxiao An, Man Sun, Muhan Li
 	//  Rev.0 12 July 2017
@@ -88,13 +82,10 @@ namespace display {
 	//  
 	// Purpose:  
 	//    print the result of calculation on lcd 
-	//  
 	// Parameters:  
-	//    [in] int - the result to be printed on the lcd
-	//  
+	//    [in] int - the result to be printed on the lcd  
 	// Returns:  
 	//    void  
-	// 
 	// Author:  
 	//    Mingxiao An, Man Sun, Muhan Li
 	//  Rev.0 12 July 2017
@@ -115,13 +106,10 @@ namespace display {
 	//  
 	// Purpose:  
 	//    clear all the content on lcd and set to the initial state 
-	//  
 	// Parameters:  
 	//    void
-	//  
 	// Returns:  
 	//    void  
-	// 
 	// Author:  
 	//    Mingxiao An, Man Sun, Muhan Li
 	//  Rev.0 12 July 2017
