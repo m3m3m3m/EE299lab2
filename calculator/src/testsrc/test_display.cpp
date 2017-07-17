@@ -12,8 +12,10 @@ namespace test {
 		}
 
 		void loop() {
-			for (int i = 0; i < 7; i++)
+			for (int i = 0; i < 7; i++) {
 				addCmd('i');
+				delay(1000);
+			}
 			printErr("1234567890");
 			delay(10000);
 			clear();
