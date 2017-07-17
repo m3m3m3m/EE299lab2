@@ -19,7 +19,7 @@
 #define BAUD_RATE 	9600				// baud rate for serial monitor
 #define LCD_PORT 	2, 3, 4, 5, 6, 7, 8	// bus 1 of the Seeduino sensor Chasis
 #define I2C_PORT 	4					// analog port for i2c bus
-#define PHASE		2					// when phase is 0, the code goes to test
+#define PHASE		4					// when phase is 0, the code goes to test
 #define TEST 		1					// the test code No.
-#define MASTER		1					// 1 for MASTER, 2 for SLAVE
+#define MASTER		2					// 1 for MASTER, 2 for SLAVE
 #endif	// CONSTANT_H

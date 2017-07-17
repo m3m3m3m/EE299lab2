@@ -35,29 +35,31 @@ namespace command {
 	// print error information to the remote lcd:
 	void printErr(char const* err) {
 		Wire.beginTransmission(I2C_PORT);	// start transmitting
-    	Wire.write(Command::PRINTERR);   // send the printerr command
-    	Wire.write(err, strlen(err));	// send the error info
-    	Wire.endTransmission();         // stop transmitting
+    	Wire.write(Command::PRINTERR);   	// send the printerr command
+    	Wire.write(err, strlen(err));		// send the error info
+    	Wire.endTransmission();         	// stop transmitting
     	Serial.println();
-    	Serial.println(err);			// echo the output to monitor
+    	Serial.println(err);				// echo the output to monitor
 	}
 	
 	// print the result to the remote lcd 
 	void printAns(int ans) {
 		char buf[32];
-		sprintf(buf, "%s", ans);
+		sprintf(buf, "%d", ans);
 		Wire.beginTransmission(I2C_PORT);	// start transmitting
-    	Wire.write(Command::PRINTANS);   // send the printans command
-    	Wire.write(buf, strlen(buf));	// send the answer
-    	Wire.endTransmission();         // stop transmitting
-    	Serial.println(ans);			// echo the output to monitor
+    	Wire.write(Command::PRINTANS);		// send the printans command
+    	Wire.write(buf, strlen(buf));		// send the answer
+    	Wire.endTransmission();         	// stop transmitting
+    	Serial.println(ans);				// echo the output to monitor
 	}
 
 	// clear and initialize the remote lcd
 	void clear() {
 		Wire.beginTransmission(I2C_PORT);	// start transmitting
-    	Wire.write(Command::CLEAR);   	// send the clear command
-    	Wire.endTransmission();         // stop transmitting
+    	Wire.write(Command::CLEAR);   		// send the clear command
+    	// Serial.println('write');
+    	Wire.endTransmission();         	// stop transmitting
+    	// Serial.println("endTransmission");
 	}
 
 	// this function is registered as an event:

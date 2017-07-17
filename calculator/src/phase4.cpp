@@ -20,6 +20,7 @@
 
 #include "../headers/utils.h"
 #include "../headers/command.h"
+#include "../headers/display.h"
 #include "../headers/constant.h"
 
 namespace phase {	
@@ -30,6 +31,7 @@ namespace phase {
 		// the setup routine runs once when you press reset:
 		void setup() {
 			Wire.begin();
+			prompt();
 		}
 
 		int op_a;					// the fisrt input number
@@ -85,6 +87,8 @@ namespace phase {
 		//-----------------------------------------------------------
 		int inputOpA() {
 			command::clear();
+
+		// Serial.println("here");
 			char bytes[3];			// define a buffer to store the input
 			// receive the input from serial monitor into the buffer
 			int result = Serial.readBytes(bytes, 3);
@@ -257,15 +261,22 @@ namespace phase {
 
 		#else
 
+		// void receiveEvent(int howMany) {
+		// 	Serial.println("on");
+		// }
+
 		// the setup routine runs once when you press reset:
 		void setup() {
-			Wire.begin(I2C_PORT);           // join i2c bus
-	    	Wire.onReceive(command::receiveEvent);   // register event
+			display::begin();
+			Wire.begin(I2C_PORT);				// join i2c bus
+	    	Wire.onReceive(command::receiveEvent);		// register event
+	    	Serial.println("finished setup");
 		}
 
 		// the loop routine runs over and over again forever:
 		void loop() {
 			delay(100);
+			// Serial.print('-');
 		}
 
 		#endif	// MASTER
