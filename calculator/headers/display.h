@@ -1,13 +1,13 @@
 //----------------------------------------------------------------
-// Module name:
-//    display.h
-// Languange:
-//    C++
-// Description:
-//    This header defines functions for display used in the program,
-//	  including begin(), addCmd(), printErr(), printAns() and clear().
-// Author:
-//	  Mingxiao An, Man Sun, Muhan Li
+// 	Module name:
+//    	display.h
+// 	Languange:
+//    	C++
+// 	Description:
+//    	This header defines functions for display used in the program,
+//	  	including begin(), addCmd(), printErr(), printAns() and clear().
+// 	Author:
+//	  	Mingxiao An, Man Sun, Muhan Li
 //	Rev.0 12 July 2017
 //  Rev.1 13 July 2017
 //  Rev.2 16 July 2017

@@ -1,14 +1,14 @@
 //----------------------------------------------------------------
-// Module name:
-//    utils.h
-// Languange:
-//    C++
-// Description:
-//    This header provides many useful tools for this module,
-//	  including judging validility, printing hint and doing
-//	  calculations.
-// Author:
-//	  Mingxiao An, Man Sun, Muhan Li
+// 	Module name:
+//    	utils.h
+// 	Languange:
+//    	C++
+// 	Description:
+//    	This header provides many useful tools for this module,
+//	  	including judging validility, printing hint and doing
+//	  	calculations.
+// 	Author:
+//	  	Mingxiao An, Man Sun, Muhan Li
 //	Rev.0 12 July 2017
 //  Rev.1 13 July 2017
 //  Rev.2 16 July 2017
