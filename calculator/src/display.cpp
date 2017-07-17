@@ -18,14 +18,14 @@
 #include <stdio.h>
 
 namespace display {
-	LiquidCrystal lcd(LCD_PORT);// initialize a lcd
-	int count;// to store the number of the characters already input
-	int shift;// to store how many times the lcd scrolls left
+	LiquidCrystal lcd(LCD_PORT);		// initialize a lcd
+	int count;							// to store the number of the characters already input
+	int shift;							// to store how many times the lcd scrolls left
 	
 	void begin() {
-		lcd.begin(16, 2);// 16 * 2 characters
-		count = 0, shift = 0;// initialize to zero
-		lcd.setCursor(7, 0);// set the cursor to the middle of the first line
+		lcd.begin(16, 2);				// 16 * 2 characters
+		count = 0, shift = 0;			// initialize to zero
+		lcd.setCursor(7, 0);			// set the cursor to the middle of the first line
 	}
 
 	//-----------------------------------------------------------  
