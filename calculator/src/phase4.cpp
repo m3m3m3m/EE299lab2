@@ -179,6 +179,7 @@ namespace phase {
 				// if the input is a positive number
 				if (isDigit(bytes[0]) && isDigit(bytes[1])) {
 					// print the number on the remote lcd
+					command::addCmd(' ');
 					command::addCmd(bytes[0]);
 					command::addCmd(bytes[1]);
 					// transfer the 3-digit buffer into a number
@@ -194,6 +195,7 @@ namespace phase {
 				// if the input is a negative number
 				if (bytes[0] == '-' && isDigit(bytes[1]) && isDigit(bytes[2])) {
 					// print the number on the remote lcd
+					command::addCmd(' ');
 					command::addCmd(bytes[0]);
 					command::addCmd(bytes[1]);
 					command::addCmd(bytes[2]);

@@ -160,6 +160,7 @@ namespace phase {
 				return 0;
 			} if (isDigit(bytes[0]) && isDigit(bytes[1])) {
 				// if the input is a number, print the number on lcd
+				display::addCmd(' ');
 				display::addCmd(bytes[0]);
 				display::addCmd(bytes[1]);
 				// transfer the two-digit buffer into a number

@@ -173,6 +173,7 @@ namespace phase {
 				// if the input is a positive number
 				if (isDigit(bytes[0]) && isDigit(bytes[1])) {
 					// print the number on lcd
+					display::addCmd(' ');
 					display::addCmd(bytes[0]);
 					display::addCmd(bytes[1]);
 					// transfer the 3-digit buffer into a number
@@ -188,6 +189,7 @@ namespace phase {
 				// if the input is a negative number
 				if (bytes[0] == '-' && isDigit(bytes[1]) && isDigit(bytes[2])) {
 					// print the number on lcd
+					display::addCmd(' ');
 					display::addCmd(bytes[0]);
 					display::addCmd(bytes[1]);
 					display::addCmd(bytes[2]);
