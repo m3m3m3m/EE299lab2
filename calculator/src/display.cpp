@@ -85,11 +85,11 @@ namespace display {
 	//  Rev.2 16 July 2017
 	//----------------------------------------------------------- 
 	void printErr(char const * output) {
+		// set the cursor according to the length of the char array 
 		lcd.setCursor(shift + 8 - strlen(output) / 2, 1);
-											// set the cursor according to the length of the char array 
-		lcd.print(output);					// print the error information on the lcd
-		Serial.println("");					// print on a new line of serial monitor
-		Serial.println(output);				// print the error information on the serial monitor
+		lcd.print(output);		// print the error information on the lcd
+		Serial.println("");		// print on a new line of serial monitor
+		Serial.println(output);	// print the error information on the serial monitor
 	}
 
 	//-----------------------------------------------------------  
@@ -108,12 +108,12 @@ namespace display {
 	//  Rev.2 16 July 2017
 	//----------------------------------------------------------- 
 	void printAns(int output) {
-		char buf[32];						// initialize a buffer to store result message
-		sprintf(buf, "%d", output);			// push the integer as a string into the buffer
+		char buf[32];				// initialize a buffer to store result message
+		sprintf(buf, "%d", output);	// push the integer as a string into the buffer
 		lcd.setCursor(shift + 8 - strlen(buf) / 2, 1);
-											// set the cursor according to the length of result
-		lcd.print(buf);						// print the result stored in the buffer to lcd 
-		Serial.println(output);				// print the integer result to the serial monitor
+								// set the cursor according to the length of result
+		lcd.print(buf);			// print the result stored in the buffer to lcd 
+		Serial.println(output);	// print the integer result to the serial monitor
 	}
 
 	//-----------------------------------------------------------  
@@ -132,9 +132,9 @@ namespace display {
 	//  Rev.2 16 July 2017
 	//----------------------------------------------------------- 
 	void clear() {
-		lcd.clear();						// clear all the content on lcd and scroll back to initial					
-		lcd.setCursor(7, 0);				// set the cursor to the beginnig point of input
-		count = 0, shift = 0;				// set to initial value
+		lcd.clear();			// clear all the content on lcd and scroll back to initial				
+		lcd.setCursor(7, 0);	// set the cursor to the beginnig point of input
+		count = 0, shift = 0;	// set to initial value
 	}
 	
 }

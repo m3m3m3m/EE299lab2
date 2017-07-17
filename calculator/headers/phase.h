@@ -32,6 +32,11 @@ namespace phase {
 		void loop();
 	}
 
+	namespace phase4 {
+		void setup();
+		void loop();
+	}
+
 	#if PHASE == 1
 
 	using phase1::setup;
@@ -46,6 +51,11 @@ namespace phase {
 
 	using phase3::setup;
 	using phase3::loop;
+
+	#elif PHASE == 4
+
+	using phase4::setup;
+	using phase4::loop;
 
 	#endif	// PHASE
 }
