@@ -1,8 +1,0 @@
-\contentsline {section}{\numberline {1}ABSTRACT}{3}
-\contentsline {section}{\numberline {2}INTRODUCTION}{3}
-\contentsline {section}{\numberline {3}DISCUSSION OF THE LAB}{3}
-\contentsline {section}{\numberline {4}TESTPLAN}{3}
-\contentsline {section}{\numberline {5}PRESENTATION, DISCUSSION, AND ANALYSIS OF THE RESULTS}{3}
-\contentsline {section}{\numberline {6}ANALYSIS OF ANY ERRORS}{3}
-\contentsline {section}{\numberline {7}SUMMARY AND CONCLUSIONS}{3}
-\contentsline {section}{\numberline {8}APPENDICES}{3}
