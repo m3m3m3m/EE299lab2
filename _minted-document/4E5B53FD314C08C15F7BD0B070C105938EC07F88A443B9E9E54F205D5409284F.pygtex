@@ -1,0 +1,48 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{//\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+\PYG{c+c1}{// Module name:}
+\PYG{c+c1}{//    calculator.ino}
+\PYG{c+c1}{// Languange:}
+\PYG{c+c1}{//    Wiring/Arduino}
+\PYG{c+c1}{// Description:}
+\PYG{c+c1}{//    The program takes user\PYGZsq{}s input from the Serial Monitor and}
+\PYG{c+c1}{//	  prints the input and result on a LCD.}
+\PYG{c+c1}{// Author:}
+\PYG{c+c1}{//	  Mingxiao An, Man Sun, Muhan Li}
+\PYG{c+c1}{//	Rev.0 12 July 2017}
+\PYG{c+c1}{//  Rev.1 13 July 2017}
+\PYG{c+c1}{//  Rev.2 16 July 2017}
+\PYG{c+c1}{//\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZdq{}Arduino.h\PYGZdq{}}
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZdq{}headers/constant.h\PYGZdq{}}
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZdq{}headers/phase.h\PYGZdq{}}
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZdq{}headers/test.h\PYGZdq{}}
+
+\PYG{c+cp}{\PYGZsh{}if PHASE == 0					}\PYG{c+c1}{// used for testing}
+
+\PYG{c+c1}{// the setup routine runs once when you press reset:}
+\PYG{k+kt}{void} \PYG{n+nf}{setup}\PYG{p}{()} \PYG{p}{\PYGZob{}}
+    \PYG{n}{Serial}\PYG{p}{.}\PYG{n}{begin}\PYG{p}{(}\PYG{n}{BAUD\PYGZus{}RATE}\PYG{p}{);}	\PYG{c+c1}{// start serial port at baud rate}
+    \PYG{n}{test}\PYG{o}{::}\PYG{n}{setup}\PYG{p}{();}			  \PYG{c+c1}{// use the setup function in test namespace}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{c+c1}{// the loop routine runs over and over again forever:}
+\PYG{k+kt}{void} \PYG{n+nf}{loop}\PYG{p}{()} \PYG{p}{\PYGZob{}}
+    \PYG{n}{test}\PYG{o}{::}\PYG{n}{loop}\PYG{p}{();}				\PYG{c+c1}{// use the loop function in test namespace}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{c+cp}{\PYGZsh{}else							}\PYG{c+c1}{// used for displaying}
+
+\PYG{c+c1}{// the setup routine runs once when you press reset:}
+\PYG{k+kt}{void} \PYG{n+nf}{setup}\PYG{p}{()} \PYG{p}{\PYGZob{}}
+    \PYG{n}{Serial}\PYG{p}{.}\PYG{n}{begin}\PYG{p}{(}\PYG{n}{BAUD\PYGZus{}RATE}\PYG{p}{);}	\PYG{c+c1}{// start serial port at baud rate}
+    \PYG{n}{phase}\PYG{o}{::}\PYG{n}{setup}\PYG{p}{();}				\PYG{c+c1}{// use the setup function in test namespace}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{c+c1}{// the loop routine runs over and over again forever:}
+\PYG{k+kt}{void} \PYG{n+nf}{loop}\PYG{p}{()} \PYG{p}{\PYGZob{}}
+    \PYG{n}{phase}\PYG{o}{::}\PYG{n}{loop}\PYG{p}{();}				\PYG{c+c1}{// use the loop function in test namespace}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{c+cp}{\PYGZsh{}endif	}\PYG{c+c1}{// PHASE == 0}
+\end{Verbatim}
