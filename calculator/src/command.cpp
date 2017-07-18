@@ -23,7 +23,22 @@
 #include "string.h"
 
 namespace command {
-	// add one character to the remote lcd as input
+	//-----------------------------------------------------------  
+	// addCmd 
+	//  
+	// Purpose:  
+	//    add one character to the remote lcd as input   
+	// Parameters:  
+	//    [in] char - the character to be sent to the remote lcd
+	// Returns:  
+	//    void  
+	// Author:  
+	//    Mingxiao An, Man Sun, Muhan Li
+	//  Rev.0 12 July 2017
+	//  Rev.1 13 July 2017
+	//  Rev.2 16 July 2017
+	//	Rev.3 17 July 2017
+	//----------------------------------------------------------- 
 	void addCmd(char cmd) {
 		Wire.beginTransmission(I2C_PORT);	// start transmitting
     	Wire.write(Command::ADDCMD);   		// send the addcmd command
@@ -32,7 +47,23 @@ namespace command {
     	Serial.print(cmd);					// echo the output to monitor
 	}
 
-	// print error information to the remote lcd:
+	//-----------------------------------------------------------  
+	// printErr 
+	//
+	// Purpose:  
+	//    send error information to the remote lcd
+	// Parameters:  
+	//    [in] char* - the char array (contains error info) to be 
+	//				   sent to the remote lcd
+	// Returns:  
+	//    void  
+	// Author:  
+	//    Mingxiao An, Man Sun, Muhan Li
+	//  Rev.0 12 July 2017
+	//  Rev.1 13 July 2017
+	//  Rev.2 16 July 2017
+	//	Rev.3 17 July 2017
+	//----------------------------------------------------------- 
 	void printErr(char const* err) {
 		Wire.beginTransmission(I2C_PORT);	// start transmitting
     	Wire.write(Command::PRINTERR);   	// send the printerr command
@@ -42,7 +73,22 @@ namespace command {
     	Serial.println(err);				// echo the output to monitor
 	}
 	
-	// print the result to the remote lcd 
+	//-----------------------------------------------------------  
+	// printAns 
+	//  
+	// Purpose:  
+	//    send the result to the remote lcd 
+	// Parameters:  
+	//    [in] int - the result to be sent to the remote lcd  
+	// Returns:  
+	//    void  
+	// Author:  
+	//    Mingxiao An, Man Sun, Muhan Li
+	//  Rev.0 12 July 2017
+	//  Rev.1 13 July 2017
+	//  Rev.2 16 July 2017
+	//	Rev.3 17 July 2017
+	//----------------------------------------------------------- 
 	void printAns(int ans) {
 		char buf[32];
 		sprintf(buf, "%d", ans);
@@ -53,36 +99,67 @@ namespace command {
     	Serial.println(ans);				// echo the output to monitor
 	}
 
-	// clear and initialize the remote lcd
+	//-----------------------------------------------------------  
+	// clear
+	//  
+	// Purpose:  
+	//    clear and initialize the remote lcd
+	// Parameters:  
+	//    void
+	// Returns:  
+	//    void  
+	// Author:  
+	//    Mingxiao An, Man Sun, Muhan Li
+	//  Rev.0 12 July 2017
+	//  Rev.1 13 July 2017
+	//  Rev.2 16 July 2017
+	//	Rev.3 17 July 2017
+	//----------------------------------------------------------- 
 	void clear() {
 		Wire.beginTransmission(I2C_PORT);	// start transmitting
     	Wire.write(Command::CLEAR);   		// send the clear command
-    	// Serial.println('write');
     	Wire.endTransmission();         	// stop transmitting
-    	// Serial.println("endTransmission");
 	}
 
+	//-----------------------------------------------------------  
+	// receiveEvent
+	//  
+	// Purpose:  
+	//    receive a command from a remote cmd and execute it, 
+	//	  registered as an event.
+	// Parameters:  
+	//    [in] int - the number of the bytes that need to be received,
+	//				 this input is managed by Wire.
+	// Returns:  
+	//    void  
+	// Author:  
+	//    Mingxiao An, Man Sun, Muhan Li
+	//  Rev.0 12 July 2017
+	//  Rev.1 13 July 2017
+	//  Rev.2 16 July 2017
+	//	Rev.3 17 July 2017
+	//-----------------------------------------------------------
 	// this function is registered as an event:
 	void receiveEvent(int numBytes) {
-		char ch;
-		char buf[32];
-		Command cmd = (Command)Wire.read();
-		numBytes -= 1;
-		switch (cmd) {
-			case Command::ADDCMD:
-				ch = Wire.read();
-				display::addCmd(ch);
+		char ch;							// input char from remote lcd
+		char buf[32];						// store the input command
+		Command cmd = (Command)Wire.read();	// read the first char
+		numBytes -= 1;						// remained length decreased
+		switch (cmd) {						// recognize the command
+			case Command::ADDCMD:			// display a char (1st row)
+				ch = Wire.read();			// read one char from Wire
+				display::addCmd(ch);		// display the char on lcd
 				break;
-			case Command::PRINTANS:
-			case Command::PRINTERR:
+			case Command::PRINTANS:			// display answer (2nd row)
+			case Command::PRINTERR:			// display error (2nd row)
 				for (int i = 0; i < numBytes; i++) {
-					buf[i] = Wire.read();
-				}
-				buf[numBytes] = '\0';
-				display::printErr(buf);
+					buf[i] = Wire.read();	// read all the remaining 
+				}							// char one by one
+				buf[numBytes] = '\0';		// add a null char in the end
+				display::printErr(buf);		// display the error on lcd
 				break;
-			case Command::CLEAR:
-				display::clear();
+			case Command::CLEAR:			// clear and initialize lcd
+				display::clear();			// clear and initialize lcd
 				break;
 		}
 	}

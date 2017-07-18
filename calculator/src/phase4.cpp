@@ -49,13 +49,13 @@ namespace phase {
 		void loop() {
 			if (Serial.available() > 0) {
 				switch(step) {		
-					case 0: 		// first input a number of 2 digits
+					case 0: 		// first input a signed number of 2 digits
 						step = inputOpA(); 
 						break;	
 					case 1: 		// second input the operator
 						step = inputOpr(); 
 						break;	
-					case 2: 		// then input another 2-digit number
+					case 2: 		// then input another 2-digit signed number
 						step = inputOpB(); 
 						break;	
 					case 3: 		// end with an equality mark
@@ -87,8 +87,6 @@ namespace phase {
 		//-----------------------------------------------------------
 		int inputOpA() {
 			command::clear();
-
-		// Serial.println("here");
 			char bytes[3];			// define a buffer to store the input
 			// receive the input from serial monitor into the buffer
 			int result = Serial.readBytes(bytes, 3);
@@ -261,22 +259,17 @@ namespace phase {
 
 		#else
 
-		// void receiveEvent(int howMany) {
-		// 	Serial.println("on");
-		// }
-
 		// the setup routine runs once when you press reset:
 		void setup() {
 			display::begin();
-			Wire.begin(I2C_PORT);				// join i2c bus
-	    	Wire.onReceive(command::receiveEvent);		// register event
-	    	Serial.println("finished setup");
+			Wire.begin(I2C_PORT);					// join i2c bus
+	    	Wire.onReceive(command::receiveEvent);	// register event
+	    	Serial.println("finished setup");		// print the hint	
 		}
 
 		// the loop routine runs over and over again forever:
 		void loop() {
 			delay(100);
-			// Serial.print('-');
 		}
 
 		#endif	// MASTER
