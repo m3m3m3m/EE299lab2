@@ -1,0 +1,42 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{//\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+\PYG{c+c1}{//  Module name:}
+\PYG{c+c1}{//      test\PYGZus{}display.cpp}
+\PYG{c+c1}{//  Languange:}
+\PYG{c+c1}{//      C++}
+\PYG{c+c1}{//  Description:}
+\PYG{c+c1}{//      This file provides a testing function for the module. It tests}
+\PYG{c+c1}{//      whether the content can be properly displayed on the lcd.}
+\PYG{c+c1}{//  Author:}
+\PYG{c+c1}{//      Mingxiao An, Man Sun, Muhan Li}
+\PYG{c+c1}{//  Rev.0 12 July 2017}
+\PYG{c+c1}{//  Rev.1 13 July 2017}
+\PYG{c+c1}{//  Rev.2 16 July 2017}
+\PYG{c+c1}{//\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZdq{}Arduino.h\PYGZdq{}}
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZdq{}../../headers/display.h\PYGZdq{}}
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZdq{}../../headers/test.h\PYGZdq{}}
+
+\PYG{k}{using} \PYG{k}{namespace} \PYG{n}{display}\PYG{p}{;}
+
+\PYG{k}{namespace} \PYG{n}{test} \PYG{p}{\PYGZob{}}
+    \PYG{k}{namespace} \PYG{n}{display} \PYG{p}{\PYGZob{}}             \PYG{c+c1}{// define namespace for display test}
+        \PYG{c+c1}{// the setup routine runs once when you press reset:}
+        \PYG{k+kt}{void} \PYG{n}{setup}\PYG{p}{()} \PYG{p}{\PYGZob{}}
+            \PYG{n}{begin}\PYG{p}{();}                \PYG{c+c1}{// begin() from display.h to prepare}
+        \PYG{p}{\PYGZcb{}}
+
+        \PYG{c+c1}{// the loop routine runs over and over again forever:}
+        \PYG{k+kt}{void} \PYG{n}{loop}\PYG{p}{()} \PYG{p}{\PYGZob{}}
+            \PYG{c+c1}{// print i for 7 times with a second of delay}
+            \PYG{k}{for} \PYG{p}{(}\PYG{k+kt}{int} \PYG{n}{i} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{;} \PYG{n}{i} \PYG{o}{\PYGZlt{}} \PYG{l+m+mi}{7}\PYG{p}{;} \PYG{n}{i}\PYG{o}{++}\PYG{p}{)} \PYG{p}{\PYGZob{}}
+                \PYG{n}{addCmd}\PYG{p}{(}\PYG{l+s+sc}{\PYGZsq{}i\PYGZsq{}}\PYG{p}{);}
+                \PYG{n}{delay}\PYG{p}{(}\PYG{l+m+mi}{1000}\PYG{p}{);}
+            \PYG{p}{\PYGZcb{}}
+            \PYG{n}{printErr}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}1234567890\PYGZdq{}}\PYG{p}{);} \PYG{c+c1}{// print some message as an error}
+            \PYG{n}{delay}\PYG{p}{(}\PYG{l+m+mi}{10000}\PYG{p}{);}           \PYG{c+c1}{// delay 10 seconds to check}
+            \PYG{n}{clear}\PYG{p}{();}                \PYG{c+c1}{// clear all contents on lcd}
+        \PYG{p}{\PYGZcb{}}
+    \PYG{p}{\PYGZcb{}}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

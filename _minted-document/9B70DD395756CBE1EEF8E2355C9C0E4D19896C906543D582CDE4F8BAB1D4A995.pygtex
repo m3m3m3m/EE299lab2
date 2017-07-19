@@ -1,0 +1,27 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{//\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+\PYG{c+c1}{//  Module name:}
+\PYG{c+c1}{//      constant.h}
+\PYG{c+c1}{//  Languange:}
+\PYG{c+c1}{//      C++}
+\PYG{c+c1}{//  Description:}
+\PYG{c+c1}{//      This header defines constants used in the program, such as}
+\PYG{c+c1}{//      pin numbers, baud rate, and other constant values.}
+\PYG{c+c1}{//  Author:}
+\PYG{c+c1}{//      Mingxiao An, Man Sun, Muhan Li}
+\PYG{c+c1}{//  Rev.0 12 July 2017}
+\PYG{c+c1}{//  Rev.1 13 July 2017}
+\PYG{c+c1}{//  Rev.2 16 July 2017}
+\PYG{c+c1}{//\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+
+\PYG{c+cp}{\PYGZsh{}ifndef CONSTANT\PYGZus{}H}
+\PYG{c+cp}{\PYGZsh{}define CONSTANT\PYGZus{}H}
+
+\PYG{c+cp}{\PYGZsh{}define BAUD\PYGZus{}RATE   9600                }\PYG{c+c1}{// baud rate for serial monitor}
+\PYG{c+cp}{\PYGZsh{}define LCD\PYGZus{}PORT    2, 3, 4, 5, 6, 7, 8 }\PYG{c+c1}{// bus 1 of the Seeduino sensor Chasis}
+\PYG{c+cp}{\PYGZsh{}define I2C\PYGZus{}PORT    4                   }\PYG{c+c1}{// analog port for i2c bus}
+\PYG{c+cp}{\PYGZsh{}define PHASE       4                   }\PYG{c+c1}{// when phase is 0, the code goes to test}
+\PYG{c+cp}{\PYGZsh{}define TEST        1                   }\PYG{c+c1}{// the test code No.}
+\PYG{c+cp}{\PYGZsh{}define MASTER      2                   }\PYG{c+c1}{// 1 for MASTER, 2 for SLAVE}
+\PYG{c+cp}{\PYGZsh{}endif  }\PYG{c+c1}{// CONSTANT\PYGZus{}H}
+\end{Verbatim}

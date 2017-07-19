@@ -1,0 +1,31 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{//\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+\PYG{c+c1}{//  Module name:}
+\PYG{c+c1}{//      display.h}
+\PYG{c+c1}{//  Languange:}
+\PYG{c+c1}{//      C++}
+\PYG{c+c1}{//  Description:}
+\PYG{c+c1}{//      This header defines functions for display used in the program,}
+\PYG{c+c1}{//      including begin(), addCmd(), printErr(), printAns() and clear().}
+\PYG{c+c1}{//  Author:}
+\PYG{c+c1}{//      Mingxiao An, Man Sun, Muhan Li}
+\PYG{c+c1}{//  Rev.0 12 July 2017}
+\PYG{c+c1}{//  Rev.1 13 July 2017}
+\PYG{c+c1}{//  Rev.2 16 July 2017}
+\PYG{c+c1}{//\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+\PYG{c+cp}{\PYGZsh{}ifndef DISPLAY\PYGZus{}H}
+\PYG{c+cp}{\PYGZsh{}define DISPLAY\PYGZus{}H}
+
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZlt{}LiquidCrystal.h\PYGZgt{}}
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZdq{}../headers/constant.h\PYGZdq{}}
+
+\PYG{k}{namespace} \PYG{n}{display} \PYG{p}{\PYGZob{}}
+    \PYG{k+kt}{void} \PYG{n}{begin}\PYG{p}{();}               \PYG{c+c1}{// prepare for the display}
+    \PYG{k+kt}{void} \PYG{n+nf}{addCmd}\PYG{p}{(}\PYG{k+kt}{char}\PYG{p}{);}          \PYG{c+c1}{// add one character to the lcd as input}
+    \PYG{k+kt}{void} \PYG{n+nf}{printErr}\PYG{p}{(}\PYG{k+kt}{char} \PYG{k}{const}\PYG{o}{*}\PYG{p}{);} \PYG{c+c1}{// print error information on the lcd}
+    \PYG{k+kt}{void} \PYG{n+nf}{printAns}\PYG{p}{(}\PYG{k+kt}{int}\PYG{p}{);}         \PYG{c+c1}{// print the result of calculation on lcd}
+    \PYG{k+kt}{void} \PYG{n+nf}{clear}\PYG{p}{();}               \PYG{c+c1}{// clear all the content on lcd}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{c+cp}{\PYGZsh{}endif}
+\end{Verbatim}

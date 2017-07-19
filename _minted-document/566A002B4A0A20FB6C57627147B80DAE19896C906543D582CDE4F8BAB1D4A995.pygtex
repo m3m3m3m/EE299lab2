@@ -1,0 +1,222 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{//\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+\PYG{c+c1}{//  Module name:}
+\PYG{c+c1}{//      phase1.cpp}
+\PYG{c+c1}{//  Languange:}
+\PYG{c+c1}{//      C++}
+\PYG{c+c1}{//  Description:}
+\PYG{c+c1}{//      The module implements the second phase in demo. It receives}
+\PYG{c+c1}{//      user input from serial monitor following the format of two}
+\PYG{c+c1}{//      digits, one operation symbol, two digits and one equality mark.}
+\PYG{c+c1}{//      It will print the user input and result on the lcd screen.}
+\PYG{c+c1}{//  Author:}
+\PYG{c+c1}{//      Mingxiao An, Man Sun, Muhan Li}
+\PYG{c+c1}{//  Rev.0 12 July 2017}
+\PYG{c+c1}{//  Rev.1 13 July 2017}
+\PYG{c+c1}{//  Rev.2 16 July 2017}
+\PYG{c+c1}{//\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZdq{}Arduino.h\PYGZdq{}}
+
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZdq{}../headers/utils.h\PYGZdq{}}
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZdq{}../headers/display.h\PYGZdq{}}
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZdq{}../headers/constant.h\PYGZdq{}}
+
+\PYG{k}{namespace} \PYG{n}{phase} \PYG{p}{\PYGZob{}}
+    \PYG{k}{namespace} \PYG{n}{phase2} \PYG{p}{\PYGZob{}}              \PYG{c+c1}{// define the namespace of this phase}
+        \PYG{k+kt}{int} \PYG{n}{op\PYGZus{}a}\PYG{p}{;}                   \PYG{c+c1}{// the fisrt input number}
+        \PYG{k+kt}{int} \PYG{n}{op\PYGZus{}b}\PYG{p}{;}                   \PYG{c+c1}{// the second input number}
+        \PYG{k+kt}{char} \PYG{n}{opr}\PYG{p}{;}                   \PYG{c+c1}{// the input operation symbol}
+        \PYG{k+kt}{int} \PYG{n}{step} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{;}               \PYG{c+c1}{// the current input step (0,1,2,3)}
+
+        \PYG{c+c1}{// the setup routine runs once when you press reset:}
+        \PYG{k+kt}{void} \PYG{n+nf}{setup}\PYG{p}{()} \PYG{p}{\PYGZob{}}
+            \PYG{n}{display}\PYG{o}{::}\PYG{n}{begin}\PYG{p}{();}       \PYG{c+c1}{// set the lcd on a prepared state}
+            \PYG{n}{prompt}\PYG{p}{();}               \PYG{c+c1}{// from utils.h, print hint for input}
+        \PYG{p}{\PYGZcb{}}
+
+        \PYG{c+c1}{// declare functions used for propessing input in different steps}
+        \PYG{k+kt}{int} \PYG{n+nf}{inputOpA}\PYG{p}{();}
+        \PYG{k+kt}{int} \PYG{n+nf}{inputOpr}\PYG{p}{();}
+        \PYG{k+kt}{int} \PYG{n+nf}{inputOpB}\PYG{p}{();}
+        \PYG{k+kt}{int} \PYG{n+nf}{inputEqu}\PYG{p}{();}
+
+        \PYG{c+c1}{// the loop routine runs over and over again forever:}
+        \PYG{k+kt}{void} \PYG{n+nf}{loop}\PYG{p}{()} \PYG{p}{\PYGZob{}}
+            \PYG{k}{if} \PYG{p}{(}\PYG{n}{Serial}\PYG{p}{.}\PYG{n}{available}\PYG{p}{()} \PYG{o}{\PYGZgt{}} \PYG{l+m+mi}{0}\PYG{p}{)} \PYG{p}{\PYGZob{}}
+                \PYG{k}{switch}\PYG{p}{(}\PYG{n}{step}\PYG{p}{)} \PYG{p}{\PYGZob{}}
+                    \PYG{k}{case} \PYG{l+m+mi}{0}\PYG{o}{:}         \PYG{c+c1}{// first input a number of 2 digits}
+                        \PYG{n}{step} \PYG{o}{=} \PYG{n}{inputOpA}\PYG{p}{();}
+                        \PYG{k}{break}\PYG{p}{;}
+                    \PYG{k}{case} \PYG{l+m+mi}{1}\PYG{o}{:}         \PYG{c+c1}{// second input the operator}
+                        \PYG{n}{step} \PYG{o}{=} \PYG{n}{inputOpr}\PYG{p}{();}
+                        \PYG{k}{break}\PYG{p}{;}
+                    \PYG{k}{case} \PYG{l+m+mi}{2}\PYG{o}{:}         \PYG{c+c1}{// then input another 2\PYGZhy{}digit number}
+                        \PYG{n}{step} \PYG{o}{=} \PYG{n}{inputOpB}\PYG{p}{();}
+                        \PYG{k}{break}\PYG{p}{;}
+                    \PYG{k}{case} \PYG{l+m+mi}{3}\PYG{o}{:}         \PYG{c+c1}{// end with an equality mark}
+                        \PYG{n}{step} \PYG{o}{=} \PYG{n}{inputEqu}\PYG{p}{();}
+                        \PYG{k}{break}\PYG{p}{;}
+                \PYG{p}{\PYGZcb{}}
+                \PYG{k}{if} \PYG{p}{(}\PYG{n}{step} \PYG{o}{==} \PYG{l+m+mi}{0}\PYG{p}{)} \PYG{p}{\PYGZob{}}    \PYG{c+c1}{// start from the beginning}
+                    \PYG{n}{prompt}\PYG{p}{();}
+                \PYG{p}{\PYGZcb{}}
+            \PYG{p}{\PYGZcb{}}
+        \PYG{p}{\PYGZcb{}}
+
+        \PYG{c+c1}{//\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+        \PYG{c+c1}{// inputOpA}
+        \PYG{c+c1}{//}
+        \PYG{c+c1}{// Purpose:}
+        \PYG{c+c1}{//    recieve the first 2\PYGZhy{}digit number and check the validation}
+        \PYG{c+c1}{// Parameters:}
+        \PYG{c+c1}{//    void}
+        \PYG{c+c1}{// Returns:}
+        \PYG{c+c1}{//    int \PYGZhy{} the next expected step}
+        \PYG{c+c1}{// Author:}
+        \PYG{c+c1}{//    Mingxiao An, Man Sun, Muhan Li}
+        \PYG{c+c1}{//  Rev.0 12 July 2017}
+        \PYG{c+c1}{//  Rev.1 13 July 2017}
+        \PYG{c+c1}{//  Rev.2 16 July 2017}
+        \PYG{c+c1}{//\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+        \PYG{k+kt}{int} \PYG{n+nf}{inputOpA}\PYG{p}{()} \PYG{p}{\PYGZob{}}
+            \PYG{n}{display}\PYG{o}{::}\PYG{n}{clear}\PYG{p}{();}
+            \PYG{k+kt}{char} \PYG{n}{bytes}\PYG{p}{[}\PYG{l+m+mi}{2}\PYG{p}{];}          \PYG{c+c1}{// define a buffer to store the input}
+            \PYG{c+c1}{// receive the input from serial monitor into the buffer}
+            \PYG{k+kt}{int} \PYG{n}{result} \PYG{o}{=} \PYG{n}{Serial}\PYG{p}{.}\PYG{n}{readBytes}\PYG{p}{(}\PYG{n}{bytes}\PYG{p}{,} \PYG{l+m+mi}{2}\PYG{p}{);}
+            \PYG{k}{if} \PYG{p}{(}\PYG{n}{result} \PYG{o}{!=} \PYG{l+m+mi}{2}\PYG{p}{)} \PYG{p}{\PYGZob{}}      \PYG{c+c1}{// if the input is not 2\PYGZhy{}digit}
+                \PYG{c+c1}{//print error information}
+                \PYG{n}{display}\PYG{o}{::}\PYG{n}{printErr}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Invalid Input\PYGZdq{}}\PYG{p}{);}
+                \PYG{c+c1}{// wait for reinput of this round}
+                \PYG{k}{return} \PYG{l+m+mi}{0}\PYG{p}{;}
+            \PYG{p}{\PYGZcb{}} \PYG{k}{else} \PYG{k}{if} \PYG{p}{(}\PYG{n}{isDigit}\PYG{p}{(}\PYG{n}{bytes}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{])} \PYG{o}{\PYGZam{}\PYGZam{}} \PYG{n}{isDigit}\PYG{p}{(}\PYG{n}{bytes}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]))} \PYG{p}{\PYGZob{}}
+                \PYG{c+c1}{// if the input is a number, print the number on lcd}
+                \PYG{n}{display}\PYG{o}{::}\PYG{n}{addCmd}\PYG{p}{(}\PYG{n}{bytes}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]);}
+                \PYG{n}{display}\PYG{o}{::}\PYG{n}{addCmd}\PYG{p}{(}\PYG{n}{bytes}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]);}
+                \PYG{c+c1}{// transfer the two\PYGZhy{}digit buffer into a number}
+                \PYG{n}{op\PYGZus{}a} \PYG{o}{=} \PYG{p}{(}\PYG{k+kt}{int}\PYG{p}{)(}\PYG{n}{bytes}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]} \PYG{o}{\PYGZhy{}} \PYG{l+s+sc}{\PYGZsq{}0\PYGZsq{}}\PYG{p}{)} \PYG{o}{*} \PYG{l+m+mi}{10} \PYG{o}{+} \PYG{p}{(}\PYG{k+kt}{int}\PYG{p}{)(}\PYG{n}{bytes}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]} \PYG{o}{\PYGZhy{}} \PYG{l+s+sc}{\PYGZsq{}0\PYGZsq{}}\PYG{p}{);}
+                \PYG{k}{return} \PYG{l+m+mi}{1}\PYG{p}{;}           \PYG{c+c1}{// wait for next step}
+            \PYG{p}{\PYGZcb{}} \PYG{k}{else} \PYG{p}{\PYGZob{}}                \PYG{c+c1}{// if invalid}
+                \PYG{c+c1}{// print error information}
+                \PYG{n}{display}\PYG{o}{::}\PYG{n}{printErr}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Invalid Digit\PYGZdq{}}\PYG{p}{);}
+                \PYG{c+c1}{// wait for reinput of this round}
+                \PYG{k}{return} \PYG{l+m+mi}{0}\PYG{p}{;}
+            \PYG{p}{\PYGZcb{}}
+        \PYG{p}{\PYGZcb{}}
+
+        \PYG{c+c1}{//\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+        \PYG{c+c1}{// inputOpr}
+        \PYG{c+c1}{//}
+        \PYG{c+c1}{// Purpose:}
+        \PYG{c+c1}{//    recieve the operator and check the validation}
+        \PYG{c+c1}{// Parameters:}
+        \PYG{c+c1}{//    void}
+        \PYG{c+c1}{// Returns:}
+        \PYG{c+c1}{//    int \PYGZhy{} the next expected step}
+        \PYG{c+c1}{// Author:}
+        \PYG{c+c1}{//    Mingxiao An, Man Sun, Muhan Li}
+        \PYG{c+c1}{//  Rev.0 12 July 2017}
+        \PYG{c+c1}{//  Rev.1 13 July 2017}
+        \PYG{c+c1}{//  Rev.2 16 July 2017}
+        \PYG{c+c1}{//\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+        \PYG{k+kt}{int} \PYG{n+nf}{inputOpr}\PYG{p}{()} \PYG{p}{\PYGZob{}}
+            \PYG{c+c1}{// read a byte from the serial monitor}
+            \PYG{k+kt}{char} \PYG{n}{incomingByte} \PYG{o}{=} \PYG{n}{Serial}\PYG{p}{.}\PYG{n}{read}\PYG{p}{();}
+            \PYG{c+c1}{// if the received byte is an operator}
+            \PYG{k}{if} \PYG{p}{(}\PYG{n}{isOpr}\PYG{p}{(}\PYG{n}{incomingByte}\PYG{p}{))} \PYG{p}{\PYGZob{}}
+                \PYG{n}{display}\PYG{o}{::}\PYG{n}{addCmd}\PYG{p}{(}\PYG{l+s+sc}{\PYGZsq{} \PYGZsq{}}\PYG{p}{);}
+                \PYG{n}{display}\PYG{o}{::}\PYG{n}{addCmd}\PYG{p}{(}\PYG{n}{incomingByte}\PYG{p}{);}  \PYG{c+c1}{// display it on the lcd}
+                \PYG{n}{opr} \PYG{o}{=} \PYG{n}{incomingByte}\PYG{p}{;}             \PYG{c+c1}{// save the byte as a char}
+                \PYG{k}{return} \PYG{l+m+mi}{2}\PYG{p}{;}                       \PYG{c+c1}{// wait for next step}
+            \PYG{p}{\PYGZcb{}} \PYG{k}{else} \PYG{p}{\PYGZob{}}                            \PYG{c+c1}{// if it is not an operator}
+                \PYG{c+c1}{//print error information}
+                \PYG{n}{display}\PYG{o}{::}\PYG{n}{printErr}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Invalid Operator\PYGZdq{}}\PYG{p}{);}
+                \PYG{c+c1}{// wait for reinput of this round}
+                \PYG{k}{return} \PYG{l+m+mi}{0}\PYG{p}{;}
+            \PYG{p}{\PYGZcb{}}
+        \PYG{p}{\PYGZcb{}}
+
+        \PYG{c+c1}{//\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+        \PYG{c+c1}{// inputOpB}
+        \PYG{c+c1}{//}
+        \PYG{c+c1}{// Purpose:}
+        \PYG{c+c1}{//    recieve the second 2\PYGZhy{}digit number and check the validation}
+        \PYG{c+c1}{// Parameters:}
+        \PYG{c+c1}{//    void}
+        \PYG{c+c1}{// Returns:}
+        \PYG{c+c1}{//    int \PYGZhy{} the next expected step}
+        \PYG{c+c1}{// Author:}
+        \PYG{c+c1}{//    Mingxiao An, Man Sun, Muhan Li}
+        \PYG{c+c1}{//  Rev.0 12 July 2017}
+        \PYG{c+c1}{//  Rev.1 13 July 2017}
+        \PYG{c+c1}{//  Rev.2 16 July 2017}
+        \PYG{c+c1}{//\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+        \PYG{k+kt}{int} \PYG{n+nf}{inputOpB}\PYG{p}{()} \PYG{p}{\PYGZob{}}
+            \PYG{k+kt}{char} \PYG{n}{bytes}\PYG{p}{[}\PYG{l+m+mi}{2}\PYG{p}{];}          \PYG{c+c1}{// define a buffer to store the input}
+            \PYG{c+c1}{// receive the input from serial monitor into the buffer}
+            \PYG{k+kt}{int} \PYG{n}{result} \PYG{o}{=} \PYG{n}{Serial}\PYG{p}{.}\PYG{n}{readBytes}\PYG{p}{(}\PYG{n}{bytes}\PYG{p}{,} \PYG{l+m+mi}{2}\PYG{p}{);}
+            \PYG{k}{if} \PYG{p}{(}\PYG{n}{result} \PYG{o}{!=} \PYG{l+m+mi}{2}\PYG{p}{)} \PYG{p}{\PYGZob{}}      \PYG{c+c1}{// if the input is not 2\PYGZhy{}digit}
+                \PYG{c+c1}{//print error information}
+                \PYG{n}{display}\PYG{o}{::}\PYG{n}{printErr}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Invalid Input\PYGZdq{}}\PYG{p}{);}
+                \PYG{c+c1}{// wait for reinput of this round}
+                \PYG{k}{return} \PYG{l+m+mi}{0}\PYG{p}{;}
+            \PYG{p}{\PYGZcb{}} \PYG{k}{if} \PYG{p}{(}\PYG{n}{isDigit}\PYG{p}{(}\PYG{n}{bytes}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{])} \PYG{o}{\PYGZam{}\PYGZam{}} \PYG{n}{isDigit}\PYG{p}{(}\PYG{n}{bytes}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]))} \PYG{p}{\PYGZob{}}
+                \PYG{c+c1}{// if the input is a number, print the number on lcd}
+                \PYG{n}{display}\PYG{o}{::}\PYG{n}{addCmd}\PYG{p}{(}\PYG{l+s+sc}{\PYGZsq{} \PYGZsq{}}\PYG{p}{);}
+                \PYG{n}{display}\PYG{o}{::}\PYG{n}{addCmd}\PYG{p}{(}\PYG{n}{bytes}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]);}
+                \PYG{n}{display}\PYG{o}{::}\PYG{n}{addCmd}\PYG{p}{(}\PYG{n}{bytes}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]);}
+                \PYG{c+c1}{// transfer the two\PYGZhy{}digit buffer into a number}
+                \PYG{n}{op\PYGZus{}b} \PYG{o}{=} \PYG{p}{(}\PYG{k+kt}{int}\PYG{p}{)(}\PYG{n}{bytes}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]} \PYG{o}{\PYGZhy{}} \PYG{l+s+sc}{\PYGZsq{}0\PYGZsq{}}\PYG{p}{)} \PYG{o}{*} \PYG{l+m+mi}{10} \PYG{o}{+} \PYG{p}{(}\PYG{k+kt}{int}\PYG{p}{)(}\PYG{n}{bytes}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]} \PYG{o}{\PYGZhy{}} \PYG{l+s+sc}{\PYGZsq{}0\PYGZsq{}}\PYG{p}{);}
+                \PYG{k}{return} \PYG{l+m+mi}{3}\PYG{p}{;}           \PYG{c+c1}{// wait for next step}
+            \PYG{p}{\PYGZcb{}} \PYG{k}{else} \PYG{p}{\PYGZob{}}                \PYG{c+c1}{// if invalid}
+                \PYG{c+c1}{//print error information}
+                \PYG{n}{display}\PYG{o}{::}\PYG{n}{printErr}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Invalid Digit\PYGZdq{}}\PYG{p}{);}
+                \PYG{c+c1}{// wait for reinput of this round}
+                \PYG{k}{return} \PYG{l+m+mi}{0}\PYG{p}{;}
+            \PYG{p}{\PYGZcb{}}
+        \PYG{p}{\PYGZcb{}}
+
+        \PYG{c+c1}{//\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+        \PYG{c+c1}{// inputEqu}
+        \PYG{c+c1}{//}
+        \PYG{c+c1}{// Purpose:}
+        \PYG{c+c1}{//    recieve the equality mark, check the validation and calc\PYGZhy{}}
+        \PYG{c+c1}{//    ulate the result}
+        \PYG{c+c1}{// Parameters:}
+        \PYG{c+c1}{//    void}
+        \PYG{c+c1}{// Returns:}
+        \PYG{c+c1}{//    int \PYGZhy{} the next expected step}
+        \PYG{c+c1}{// Author:}
+        \PYG{c+c1}{//    Mingxiao An, Man Sun, Muhan Li}
+        \PYG{c+c1}{//  Rev.0 12 July 2017}
+        \PYG{c+c1}{//  Rev.1 13 July 2017}
+        \PYG{c+c1}{//  Rev.2 16 July 2017}
+        \PYG{c+c1}{//\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+        \PYG{k+kt}{int} \PYG{n+nf}{inputEqu}\PYG{p}{()} \PYG{p}{\PYGZob{}}
+            \PYG{c+c1}{// read a byte from the serial monitor}
+            \PYG{k+kt}{char} \PYG{n}{incomingByte} \PYG{o}{=} \PYG{n}{Serial}\PYG{p}{.}\PYG{n}{read}\PYG{p}{();}
+            \PYG{c+c1}{// if the received byte is an equality mark (\PYGZsq{}=\PYGZsq{})}
+            \PYG{k}{if} \PYG{p}{(}\PYG{n}{incomingByte} \PYG{o}{==} \PYG{l+s+sc}{\PYGZsq{}=\PYGZsq{}}\PYG{p}{)} \PYG{p}{\PYGZob{}}
+                \PYG{n}{display}\PYG{o}{::}\PYG{n}{addCmd}\PYG{p}{(}\PYG{l+s+sc}{\PYGZsq{} \PYGZsq{}}\PYG{p}{);}
+                \PYG{n}{display}\PYG{o}{::}\PYG{n}{addCmd}\PYG{p}{(}\PYG{n}{incomingByte}\PYG{p}{);}  \PYG{c+c1}{// display it on the lcd}
+                \PYG{c+c1}{// if the calculation is invalid (divided by 0)}
+                \PYG{k}{if} \PYG{p}{(}\PYG{n}{op\PYGZus{}b} \PYG{o}{==} \PYG{l+m+mi}{0} \PYG{o}{\PYGZam{}\PYGZam{}} \PYG{n}{opr} \PYG{o}{==} \PYG{l+s+sc}{\PYGZsq{}/\PYGZsq{}}\PYG{p}{)} \PYG{p}{\PYGZob{}}
+                    \PYG{c+c1}{//print error information}
+                    \PYG{n}{display}\PYG{o}{::}\PYG{n}{printErr}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Divided by Zero\PYGZdq{}}\PYG{p}{);}
+                    \PYG{c+c1}{// wait for reinput of this round}
+                    \PYG{k}{return} \PYG{l+m+mi}{0}\PYG{p}{;}
+                \PYG{p}{\PYGZcb{}} \PYG{k}{else} \PYG{p}{\PYGZob{}}    \PYG{c+c1}{// if input and calculation are both valid}
+                    \PYG{c+c1}{// (clac() from utils.h) calculate the answer}
+                    \PYG{k+kt}{int} \PYG{n}{ans} \PYG{o}{=} \PYG{n}{calc}\PYG{p}{(}\PYG{n}{op\PYGZus{}a}\PYG{p}{,} \PYG{n}{op\PYGZus{}b}\PYG{p}{,} \PYG{n}{opr}\PYG{p}{);}
+                    \PYG{n}{display}\PYG{o}{::}\PYG{n}{printAns}\PYG{p}{(}\PYG{n}{ans}\PYG{p}{);}     \PYG{c+c1}{// display the answer}
+                    \PYG{k}{return} \PYG{l+m+mi}{0}\PYG{p}{;}                   \PYG{c+c1}{// wait for a new round}
+                \PYG{p}{\PYGZcb{}}
+            \PYG{p}{\PYGZcb{}} \PYG{k}{else} \PYG{p}{\PYGZob{}}                            \PYG{c+c1}{// if the input is not \PYGZsq{}=\PYGZsq{}}
+                \PYG{c+c1}{//print error information}
+                \PYG{n}{display}\PYG{o}{::}\PYG{n}{printErr}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Invalid Equ Sign\PYGZdq{}}\PYG{p}{);}
+                \PYG{c+c1}{// wait for reinput of this round}
+                \PYG{k}{return} \PYG{l+m+mi}{0}\PYG{p}{;}
+            \PYG{p}{\PYGZcb{}}
+        \PYG{p}{\PYGZcb{}}
+    \PYG{p}{\PYGZcb{}}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

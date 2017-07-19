@@ -1,0 +1,37 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{//\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+\PYG{c+c1}{//  Module name:}
+\PYG{c+c1}{//      display.h}
+\PYG{c+c1}{//  Languange:}
+\PYG{c+c1}{//      C++}
+\PYG{c+c1}{//  Description:}
+\PYG{c+c1}{//      This header defines functions for commands used for i2c transfer,}
+\PYG{c+c1}{//      including addCmd(), printErr(), printAns() and clear(), as well}
+\PYG{c+c1}{//      as the event reciever.}
+\PYG{c+c1}{//  Author:}
+\PYG{c+c1}{//      Mingxiao An, Man Sun, Muhan Li}
+\PYG{c+c1}{//  Rev.0 12 July 2017}
+\PYG{c+c1}{//  Rev.1 13 July 2017}
+\PYG{c+c1}{//  Rev.2 16 July 2017}
+\PYG{c+c1}{//  Rev.3 17 July 2017}
+\PYG{c+c1}{//\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+
+\PYG{c+cp}{\PYGZsh{}ifndef COMMAND\PYGZus{}H}
+\PYG{c+cp}{\PYGZsh{}define COMMAND\PYGZus{}H}
+
+\PYG{k}{namespace} \PYG{n}{command} \PYG{p}{\PYGZob{}}
+    \PYG{k}{enum} \PYG{n}{Command} \PYG{p}{\PYGZob{}}
+        \PYG{n}{CLEAR}\PYG{p}{,} \PYG{n}{ADDCMD}\PYG{p}{,} \PYG{n}{PRINTERR}\PYG{p}{,} \PYG{n}{PRINTANS}
+    \PYG{p}{\PYGZcb{};}
+
+    \PYG{k+kt}{void} \PYG{n+nf}{addCmd}\PYG{p}{(}\PYG{k+kt}{char}\PYG{p}{);}          \PYG{c+c1}{// add one character to the remote lcd as input}
+    \PYG{k+kt}{void} \PYG{n+nf}{printErr}\PYG{p}{(}\PYG{k+kt}{char} \PYG{k}{const}\PYG{o}{*}\PYG{p}{);} \PYG{c+c1}{// print error information to the remote lcd}
+    \PYG{k+kt}{void} \PYG{n+nf}{printAns}\PYG{p}{(}\PYG{k+kt}{int}\PYG{p}{);}         \PYG{c+c1}{// print the result to the remote lcd}
+    \PYG{k+kt}{void} \PYG{n+nf}{clear}\PYG{p}{();}               \PYG{c+c1}{// clear and initialize the remote lcd}
+
+    \PYG{c+c1}{// this function is registered as an event:}
+    \PYG{k+kt}{void} \PYG{n+nf}{receiveEvent}\PYG{p}{(}\PYG{k+kt}{int}\PYG{p}{);}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{c+cp}{\PYGZsh{}endif  }\PYG{c+c1}{// COMMAND\PYGZus{}H}
+\end{Verbatim}

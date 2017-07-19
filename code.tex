@@ -7,10 +7,10 @@
 //    Wiring/Arduino
 // Description:
 //    The program takes user's input from the Serial Monitor and
-//	  prints the input and result on a LCD.
+//    prints the input and result on a LCD.
 // Author:
-//	  Mingxiao An, Man Sun, Muhan Li
-//	Rev.0 12 July 2017
+//    Mingxiao An, Man Sun, Muhan Li
+//  Rev.0 12 July 2017
 //  Rev.1 13 July 2017
 //  Rev.2 16 July 2017
 //----------------------------------------------------------------
@@ -19,32 +19,1701 @@
 #include "headers/phase.h"
 #include "headers/test.h"
 
-#if PHASE == 0					// used for testing
+#if PHASE == 0                  // used for testing
 
 // the setup routine runs once when you press reset:
 void setup() {
-    Serial.begin(BAUD_RATE);	// start serial port at baud rate
-    test::setup();			  // use the setup function in test namespace
+    Serial.begin(BAUD_RATE);    // start serial port at baud rate
+    test::setup();              // use the setup function in test namespace
 }
 
 // the loop routine runs over and over again forever:
 void loop() {
-    test::loop();				// use the loop function in test namespace
+    test::loop();               // use the loop function in test namespace
 }
 
-#else							// used for displaying
+#else                           // used for displaying
 
 // the setup routine runs once when you press reset:
 void setup() {
-    Serial.begin(BAUD_RATE);	// start serial port at baud rate
-    phase::setup();				// use the setup function in test namespace
+    Serial.begin(BAUD_RATE);    // start serial port at baud rate
+    phase::setup();             // use the setup function in test namespace
 }
 
 // the loop routine runs over and over again forever:
 void loop() {
-    phase::loop();				// use the loop function in test namespace
+    phase::loop();              // use the loop function in test namespace
 }
 
-#endif	// PHASE == 0
+#endif  // PHASE == 0
+\end{minted}
+
+\subsection{command.h}
+\begin{minted}{cpp}
+//----------------------------------------------------------------
+//  Module name:
+//      display.h
+//  Languange:
+//      C++
+//  Description:
+//      This header defines functions for commands used for i2c transfer,
+//      including addCmd(), printErr(), printAns() and clear(), as well
+//      as the event reciever.
+//  Author:
+//      Mingxiao An, Man Sun, Muhan Li
+//  Rev.0 12 July 2017
+//  Rev.1 13 July 2017
+//  Rev.2 16 July 2017
+//  Rev.3 17 July 2017
+//----------------------------------------------------------------
+
+#ifndef COMMAND_H
+#define COMMAND_H
+
+namespace command {
+    enum Command {
+        CLEAR, ADDCMD, PRINTERR, PRINTANS
+    };
+
+    void addCmd(char);          // add one character to the remote lcd as input 
+    void printErr(char const*); // print error information to the remote lcd
+    void printAns(int);         // print the result to the remote lcd 
+    void clear();               // clear and initialize the remote lcd
+
+    // this function is registered as an event:
+    void receiveEvent(int);
+}
+
+#endif  // COMMAND_H
+
+\end{minted}
+\subsection{constant.h}
+\begin{minted}{cpp}
+//----------------------------------------------------------------
+//  Module name:
+//      constant.h
+//  Languange:
+//      C++
+//  Description:
+//      This header defines constants used in the program, such as
+//      pin numbers, baud rate, and other constant values.
+//  Author:
+//      Mingxiao An, Man Sun, Muhan Li
+//  Rev.0 12 July 2017
+//  Rev.1 13 July 2017
+//  Rev.2 16 July 2017
+//----------------------------------------------------------------
+
+#ifndef CONSTANT_H
+#define CONSTANT_H
+
+#define BAUD_RATE   9600                // baud rate for serial monitor
+#define LCD_PORT    2, 3, 4, 5, 6, 7, 8 // bus 1 of the Seeduino sensor Chasis
+#define I2C_PORT    4                   // analog port for i2c bus
+#define PHASE       4                   // when phase is 0, the code goes to test
+#define TEST        1                   // the test code No.
+#define MASTER      2                   // 1 for MASTER, 2 for SLAVE
+#endif  // CONSTANT_H
+
+\end{minted}
+
+\subsection{display.h}
+\begin{minted}{cpp}
+//----------------------------------------------------------------
+//  Module name:
+//      display.h
+//  Languange:
+//      C++
+//  Description:
+//      This header defines functions for display used in the program,
+//      including begin(), addCmd(), printErr(), printAns() and clear().
+//  Author:
+//      Mingxiao An, Man Sun, Muhan Li
+//  Rev.0 12 July 2017
+//  Rev.1 13 July 2017
+//  Rev.2 16 July 2017
+//----------------------------------------------------------------
+#ifndef DISPLAY_H
+#define DISPLAY_H
+
+#include <LiquidCrystal.h>
+#include "../headers/constant.h"
+
+namespace display {
+    void begin();               // prepare for the display
+    void addCmd(char);          // add one character to the lcd as input 
+    void printErr(char const*); // print error information on the lcd
+    void printAns(int);         // print the result of calculation on lcd 
+    void clear();               // clear all the content on lcd 
+}
+
+#endif
+
+\end{minted}
+
+\subsection{phase.h}
+\begin{minted}{cpp}
+//----------------------------------------------------------------
+//  Module name:
+//      phase.h
+//  Languange:
+//      C++
+//  Description:
+//      This header provides options for different useages of this 
+//      module, including three demo phases.
+//  Author:
+//      Mingxiao An, Man Sun, Muhan Li
+//  Rev.0 12 July 2017
+//  Rev.1 13 July 2017
+//  Rev.2 16 July 2017
+//----------------------------------------------------------------
+#ifndef PHASE_H
+#define PHASE_H
+
+namespace phase {
+
+    namespace phase1 {
+        void setup();
+        void loop();
+    }
+
+    namespace phase2 {
+        void setup();
+        void loop();
+    }
+
+    namespace phase3 {
+        void setup();
+        void loop();
+    }
+
+    namespace phase4 {
+        void setup();
+        void loop();
+    }
+
+    #if PHASE == 1
+
+    using phase1::setup;
+    using phase1::loop;
+
+    #elif PHASE == 2
+
+    using phase2::setup;
+    using phase2::loop;
+
+    #elif PHASE == 3
+
+    using phase3::setup;
+    using phase3::loop;
+
+    #elif PHASE == 4
+
+    using phase4::setup;
+    using phase4::loop;
+
+    #endif  // PHASE
+}
+
+#endif  // PHASE_H
+
+\end{minted}
+
+\subsection{test.h}
+\begin{minted}{cpp}
+//----------------------------------------------------------------
+//  Module name:
+//      test.h
+//  Languange:
+//      C++
+//  Description:
+//      This header defines namespace for testing of this module.
+//  Author:
+//      Mingxiao An, Man Sun, Muhan Li
+//  Rev.0 12 July 2017
+//  Rev.1 13 July 2017
+//  Rev.2 16 July 2017
+//----------------------------------------------------------------
+#ifndef TEST_H
+#define TEST_H
+
+#include "../headers/constant.h"
+
+namespace test {
+    
+    namespace display {
+        void setup();
+        void loop();
+    }
+
+    #if TEST == 1
+    
+    using display::setup;
+    using display::loop;
+    
+    #endif  // TEST
+}
+
+#endif  // TEST_H
+
+\end{minted}
+
+\subsection{utils.h}
+\begin{minted}{cpp}
+//----------------------------------------------------------------
+//  Module name:
+//      utils.h
+//  Languange:
+//      C++
+//  Description:
+//      This header provides many useful tools for this module,
+//      including judging validility, printing hint and doing
+//      calculations.
+//  Author:
+//      Mingxiao An, Man Sun, Muhan Li
+//  Rev.0 12 July 2017
+//  Rev.1 13 July 2017
+//  Rev.2 16 July 2017
+//----------------------------------------------------------------
+#ifndef UTILS_H
+#define UTILS_H
+
+#include "Arduino.h"
+#include "constant.h"
+
+//-----------------------------------------------------------  
+// isDigit
+//  
+// Purpose:  
+//    judge if the input char is a digit number ('0' ~ '9')
+// Parameters:  
+//    [in] char - the character to be judged
+// Returns:  
+//    bool - whether the input char is a digit  
+// Author:  
+//    Mingxiao An, Man Sun, Muhan Li
+//  Rev.0 12 July 2017
+//-----------------------------------------------------------  
+inline bool isDigit(char ch) {
+    return ch >= '0' && ch <= '9';
+}
+
+//-----------------------------------------------------------  
+// isOpr
+//  
+// Purpose:  
+//    judge if the input char is an operator('+','-','*','/')
+// Parameters:  
+//    [in] char - the character to be judged
+// Returns:  
+//    bool - whether the input char is an operator 
+// Author:  
+//    Mingxiao An, Man Sun, Muhan Li
+//  Rev.0 12 July 2017
+//-----------------------------------------------------------
+inline bool isOpr(char ch) {
+    return ch == '+' 
+        || ch == '-' 
+        || ch == '*' 
+        || ch == '/';
+}
+
+//-----------------------------------------------------------  
+// prompt
+//  
+// Purpose:  
+//    print the hint on serial monitor for users
+// Parameters:  
+//    void
+// Returns:  
+//    void 
+// Author:  
+//    Mingxiao An, Man Sun, Muhan Li
+//  Rev.0 12 July 2017
+//  Rev.1 13 July 2017
+//  Rev.2 16 July 2017
+//-----------------------------------------------------------
+inline bool prompt() {
+    #if PHASE == 0
+
+    #else
+
+    Serial.println("Please input the commands:");
+
+    #endif  // PHASE
+}
+
+//-----------------------------------------------------------  
+// calc
+//  
+// Purpose:  
+//    calculate according to the input numbers and operators
+// Parameters:  
+//    [in] int - the input operand (first)
+//    [in] int - the input operand (second)
+//    [in] char - the operator
+//      
+// Returns:  
+//    int - the calculation result
+// Author:  
+//    Mingxiao An, Man Sun, Muhan Li
+//  Rev.0 12 July 2017
+//  Rev.1 13 July 2017
+//  Rev.2 16 July 2017
+//-----------------------------------------------------------
+inline int calc(int a, int b, char op) {
+    int res = 0;
+    switch(op) {
+        case '+':
+            res = a + b;
+            break;
+        case '-':
+            res = a - b;
+            break;
+        case '*':
+            res = a * b;
+            break;
+        case '/':
+            res = a / b;
+            break;
+    }
+    return res;
+}
+
+#endif  // UTILS_H
+
+\end{minted}
+
+\subsection{test\_display.cpp}
+\begin{minted}{cpp}
+//----------------------------------------------------------------
+//  Module name:
+//      test_display.cpp
+//  Languange:
+//      C++
+//  Description:
+//      This file provides a testing function for the module. It tests
+//      whether the content can be properly displayed on the lcd.
+//  Author:
+//      Mingxiao An, Man Sun, Muhan Li
+//  Rev.0 12 July 2017
+//  Rev.1 13 July 2017
+//  Rev.2 16 July 2017
+//----------------------------------------------------------------
+#include "Arduino.h"
+#include "../../headers/display.h"
+#include "../../headers/test.h"
+
+using namespace display;
+
+namespace test { 
+    namespace display {             // define namespace for display test
+        // the setup routine runs once when you press reset:
+        void setup() {
+            begin();                // begin() from display.h to prepare
+        }
+
+        // the loop routine runs over and over again forever:
+        void loop() {
+            // print i for 7 times with a second of delay
+            for (int i = 0; i < 7; i++) {
+                addCmd('i');
+                delay(1000);
+            }
+            printErr("1234567890"); // print some message as an error
+            delay(10000);           // delay 10 seconds to check
+            clear();                // clear all contents on lcd
+        }
+    }
+}
+
+\end{minted}
+
+\subsection{command.cpp}
+\begin{minted}{cpp}
+//----------------------------------------------------------------
+//  Module name:
+//      display.cpp
+//  Languange:
+//      C++
+//  Description:
+//      This header defines functions for commands used for i2c transfer,
+//      including addCmd(), printErr(), printAns() and clear(), as well
+//      as the event reciever.
+//  Author:
+//      Mingxiao An, Man Sun, Muhan Li
+//  Rev.0 12 July 2017
+//  Rev.1 13 July 2017
+//  Rev.2 16 July 2017
+//  Rev.3 17 July 2017
+//----------------------------------------------------------------
+
+#include "Arduino.h"
+#include "Wire.h"
+#include "../headers/constant.h"
+#include "../headers/command.h"
+#include "../headers/display.h"
+#include "string.h"
+
+namespace command {
+    //-----------------------------------------------------------  
+    // addCmd 
+    //  
+    // Purpose:  
+    //    add one character to the remote lcd as input   
+    // Parameters:  
+    //    [in] char - the character to be sent to the remote lcd
+    // Returns:  
+    //    void  
+    // Author:  
+    //    Mingxiao An, Man Sun, Muhan Li
+    //  Rev.0 12 July 2017
+    //  Rev.1 13 July 2017
+    //  Rev.2 16 July 2017
+    //  Rev.3 17 July 2017
+    //----------------------------------------------------------- 
+    void addCmd(char cmd) {
+        Wire.beginTransmission(I2C_PORT);   // start transmitting
+        Wire.write(Command::ADDCMD);        // send the addcmd command
+        Wire.write(cmd);                    // send the cmd to output
+        Wire.endTransmission();             // stop transmitting
+        Serial.print(cmd);                  // echo the output to monitor
+    }
+
+    //-----------------------------------------------------------  
+    // printErr 
+    //
+    // Purpose:  
+    //    send error information to the remote lcd
+    // Parameters:  
+    //    [in] char* - the char array (contains error info) to be 
+    //                 sent to the remote lcd
+    // Returns:  
+    //    void  
+    // Author:  
+    //    Mingxiao An, Man Sun, Muhan Li
+    //  Rev.0 12 July 2017
+    //  Rev.1 13 July 2017
+    //  Rev.2 16 July 2017
+    //  Rev.3 17 July 2017
+    //----------------------------------------------------------- 
+    void printErr(char const* err) {
+        Wire.beginTransmission(I2C_PORT);   // start transmitting
+        Wire.write(Command::PRINTERR);      // send the printerr command
+        Wire.write(err, strlen(err));       // send the error info
+        Wire.endTransmission();             // stop transmitting
+        Serial.println();
+        Serial.println(err);                // echo the output to monitor
+    }
+    
+    //-----------------------------------------------------------  
+    // printAns 
+    //  
+    // Purpose:  
+    //    send the result to the remote lcd 
+    // Parameters:  
+    //    [in] int - the result to be sent to the remote lcd  
+    // Returns:  
+    //    void  
+    // Author:  
+    //    Mingxiao An, Man Sun, Muhan Li
+    //  Rev.0 12 July 2017
+    //  Rev.1 13 July 2017
+    //  Rev.2 16 July 2017
+    //  Rev.3 17 July 2017
+    //----------------------------------------------------------- 
+    void printAns(int ans) {
+        char buf[32];
+        sprintf(buf, "%d", ans);
+        Wire.beginTransmission(I2C_PORT);   // start transmitting
+        Wire.write(Command::PRINTANS);      // send the printans command
+        Wire.write(buf, strlen(buf));       // send the answer
+        Wire.endTransmission();             // stop transmitting
+        Serial.println(ans);                // echo the output to monitor
+    }
+
+    //-----------------------------------------------------------  
+    // clear
+    //  
+    // Purpose:  
+    //    clear and initialize the remote lcd
+    // Parameters:  
+    //    void
+    // Returns:  
+    //    void  
+    // Author:  
+    //    Mingxiao An, Man Sun, Muhan Li
+    //  Rev.0 12 July 2017
+    //  Rev.1 13 July 2017
+    //  Rev.2 16 July 2017
+    //  Rev.3 17 July 2017
+    //----------------------------------------------------------- 
+    void clear() {
+        Wire.beginTransmission(I2C_PORT);   // start transmitting
+        Wire.write(Command::CLEAR);         // send the clear command
+        Wire.endTransmission();             // stop transmitting
+    }
+
+    //-----------------------------------------------------------  
+    // receiveEvent
+    //  
+    // Purpose:  
+    //    receive a command from a remote cmd and execute it, 
+    //    registered as an event.
+    // Parameters:  
+    //    [in] int - the number of the bytes that need to be received,
+    //               this input is managed by Wire.
+    // Returns:  
+    //    void  
+    // Author:  
+    //    Mingxiao An, Man Sun, Muhan Li
+    //  Rev.0 12 July 2017
+    //  Rev.1 13 July 2017
+    //  Rev.2 16 July 2017
+    //  Rev.3 17 July 2017
+    //-----------------------------------------------------------
+    // this function is registered as an event:
+    void receiveEvent(int numBytes) {
+        char ch;                            // input char from remote lcd
+        char buf[32];                       // store the input command
+        Command cmd = (Command)Wire.read(); // read the first char
+        numBytes -= 1;                      // remained length decreased
+        switch (cmd) {                      // recognize the command
+            case Command::ADDCMD:           // display a char (1st row)
+                ch = Wire.read();           // read one char from Wire
+                display::addCmd(ch);        // display the char on lcd
+                break;
+            case Command::PRINTANS:         // display answer (2nd row)
+            case Command::PRINTERR:         // display error (2nd row)
+                for (int i = 0; i < numBytes; i++) {
+                    buf[i] = Wire.read();   // read all the remaining 
+                }                           // char one by one
+                buf[numBytes] = '\0';       // add a null char in the end
+                display::printErr(buf);     // display the error on lcd
+                break;
+            case Command::CLEAR:            // clear and initialize lcd
+                display::clear();           // clear and initialize lcd
+                break;
+        }
+    }
+}
+
+\end{minted}
+
+\subsection{display.cpp}
+\begin{minted}{cpp}
+//----------------------------------------------------------------
+//  Module name:
+//      display.cpp
+//  Languange:
+//      C++
+//  Description:
+//      The module implements the display functions and interfaces
+//      of the calculator.
+//  Author:
+//      Mingxiao An, Man Sun, Muhan Li
+//  Rev.0 12 July 2017
+//  Rev.1 13 July 2017
+//  Rev.2 16 July 2017
+//----------------------------------------------------------------
+#include "../headers/display.h"
+#include "Arduino.h" 
+#include <string.h>
+#include <stdio.h>
+
+namespace display {
+    LiquidCrystal lcd(LCD_PORT);        // initialize a lcd
+    int count;                          // to store the number of inputs
+    int shift;                          // to store the times lcd scrolls
+    
+    //-----------------------------------------------------------  
+    // begin
+    //  
+    // Purpose:  
+    //    initialize some local variables and prepare for the display
+    // Parameters:  
+    //    void  
+    // Returns:  
+    //    void  
+    // Author:  
+    //    Mingxiao An, Man Sun, Muhan Li
+    //  Rev.0 12 July 2017
+    //  Rev.1 13 July 2017
+    //  Rev.2 16 July 2017
+    //-----------------------------------------------------------  
+    void begin() {
+        lcd.begin(16, 2);               // 16 * 2 characters
+        count = 0, shift = 0;           // initialize to zero
+        lcd.setCursor(7, 0);            // the middle of the 1st line
+    }
+
+    //-----------------------------------------------------------  
+    // addCmd 
+    //  
+    // Purpose:  
+    //    add one character to the lcd as input   
+    // Parameters:  
+    //    [in] char - the character to be printed on the screen  
+    // Returns:  
+    //    void  
+    // Author:  
+    //    Mingxiao An, Man Sun, Muhan Li
+    //  Rev.0 12 July 2017
+    //  Rev.1 13 July 2017
+    //  Rev.2 16 July 2017
+    //-----------------------------------------------------------  
+    void addCmd(char input) {
+        count ++;                           // increase the count by one 
+        if(count != 1 && count % 2 == 1) {  // decide whether to scroll left
+            lcd.scrollDisplayLeft();        // scroll the display left
+            shift ++;                       // record the change
+        }
+        lcd.print(input);                   // print the input char to the lcd
+        Serial.print(input);                // print  to the serial monitor
+    }
+    
+    //-----------------------------------------------------------  
+    // printErr 
+    //
+    // Purpose:  
+    //    print error information on the lcd  
+    // Parameters:  
+    //    [in] char* - the char array (contains error info) to be 
+    //                 printed on the second line of lcd
+    // Returns:  
+    //    void  
+    // Author:  
+    //    Mingxiao An, Man Sun, Muhan Li
+    //  Rev.0 12 July 2017
+    //  Rev.1 13 July 2017
+    //  Rev.2 16 July 2017
+    //----------------------------------------------------------- 
+    void printErr(char const * output) {
+        // set the cursor according to the length of the char array 
+        lcd.setCursor(shift + 8 - strlen(output) / 2, 1);
+        lcd.print(output);      // print the error information on the lcd
+        Serial.println("");     // print on a new line of serial monitor
+        Serial.println(output); // print the error information on the serial monitor
+    }
+
+    //-----------------------------------------------------------  
+    // printAns 
+    //  
+    // Purpose:  
+    //    print the result of calculation on lcd 
+    // Parameters:  
+    //    [in] int - the result to be printed on the lcd  
+    // Returns:  
+    //    void  
+    // Author:  
+    //    Mingxiao An, Man Sun, Muhan Li
+    //  Rev.0 12 July 2017
+    //  Rev.1 13 July 2017
+    //  Rev.2 16 July 2017
+    //----------------------------------------------------------- 
+    void printAns(int output) {
+        char buf[32];               // initialize a buffer to store result message
+        sprintf(buf, "%d", output); // push the integer as a string into the buffer
+        lcd.setCursor(shift + 8 - strlen(buf) / 2, 1);
+                                // set the cursor according to the length of result
+        lcd.print(buf);         // print the result stored in the buffer to lcd 
+        Serial.println(output); // print the integer result to the serial monitor
+    }
+
+    //-----------------------------------------------------------  
+    // clear
+    //  
+    // Purpose:  
+    //    clear all the content on lcd and set to the initial state 
+    // Parameters:  
+    //    void
+    // Returns:  
+    //    void  
+    // Author:  
+    //    Mingxiao An, Man Sun, Muhan Li
+    //  Rev.0 12 July 2017
+    //  Rev.1 13 July 2017
+    //  Rev.2 16 July 2017
+    //----------------------------------------------------------- 
+    void clear() {
+        lcd.clear();            // clear all the content on lcd and set to initial              
+        lcd.setCursor(7, 0);    // set the cursor to the beginnig point of input
+        count = 0, shift = 0;   // set to initial value
+    }
+    
+}
+
+\end{minted}
+
+\subsection{phase1.cpp}
+\begin{minted}{cpp}
+//----------------------------------------------------------------
+//  Module name:
+//      phase1.cpp
+//  Languange:
+//      C++
+//  Description:
+//      The module implements the first phase in demo. It receives 
+//      user input from serial monitor following the format of one 
+//      digit, one operation symbol, one digit and one equality mark.
+//      It will print the user input and result on the lcd screen.
+//  Author:
+//      Mingxiao An, Man Sun, Muhan Li
+//  Rev.0 12 July 2017
+//  Rev.1 13 July 2017
+//  Rev.2 16 July 2017
+//----------------------------------------------------------------
+#include "Arduino.h"
+
+#include "../headers/utils.h"
+#include "../headers/display.h"
+#include "../headers/constant.h"
+
+namespace phase {           
+    namespace phase1 {          // define the namespace of this phase
+        int op_a;               // the fisrt input digit
+        int op_b;               // the second input digit
+        char opr;               // the input operation symbol
+        int step = 0;           // the current input step (0,1,2,3)
+ 
+        // the setup routine runs once when you press reset:
+        void setup() {
+            display::begin();   // set the lcd on a prepared state
+            prompt();           // from utils.h, print hint for input
+        }
+
+        // declare functions used for propessing input in different steps
+        int inputOpA();         
+        int inputOpr();
+        int inputOpB();
+        int inputEqu();
+
+        // the loop routine runs over and over again forever:
+        void loop() {
+            if (Serial.available() > 0) {
+                switch(step) {
+                    case 0:                 // first input a digit
+                        step = inputOpA(); 
+                        break;
+                    case 1:                 // second input the operator
+                        step = inputOpr(); 
+                        break;
+                    case 2:                 // then input another digit
+                        step = inputOpB(); 
+                        break;
+                    case 3:                 // end with an equality mark
+                        step = inputEqu(); 
+                        break;              
+                }
+                if (step == 0) {            // start from the beginning
+                    prompt();       
+                }
+            }
+        }
+
+        //-----------------------------------------------------------  
+        // inputOpA 
+        //  
+        // Purpose:  
+        //    recieve the first digit and check the validation
+        // Parameters:  
+        //    void 
+        // Returns:  
+        //    int - the next expected step   
+        // Author:  
+        //    Mingxiao An, Man Sun, Muhan Li
+        //  Rev.0 12 July 2017
+        //  Rev.1 13 July 2017
+        //  Rev.2 16 July 2017
+        //----------------------------------------------------------- 
+        int inputOpA() {
+            // read a byte from the serial monitor
+            char incomingByte = Serial.read();
+            display::clear();
+            // if the received byte is a digit (number 0 ~ 9)
+            if (isDigit(incomingByte)) {                
+                display::addCmd(incomingByte);  // display it on the lcd
+                // save the byte as an integer
+                op_a = (int)(incomingByte - '0');       
+                return 1;                       // wait for next step
+            } else {                            // if it is not a digit
+                // print error information
+                display::printErr("Invalid Digit");     
+                // wait for reinput of this round
+                return 0;                       
+            }
+        }
+
+        //-----------------------------------------------------------  
+        // inputOpr 
+        //  
+        // Purpose:  
+        //    recieve the operator and check the validation
+        // Parameters:  
+        //    void 
+        // Returns:  
+        //    int - the next expected step   
+        // Author:  
+        //    Mingxiao An, Man Sun, Muhan Li
+        //  Rev.0 12 July 2017
+        //  Rev.1 13 July 2017
+        //  Rev.2 16 July 2017
+        //----------------------------------------------------------- 
+        int inputOpr() {
+            // read a byte from the serial monitor
+            char incomingByte = Serial.read();          
+            // if the received byte is an operator
+            if (isOpr(incomingByte)) {                  
+                display::addCmd(' ');
+                display::addCmd(incomingByte);  // display it on the lcd
+                opr = incomingByte;             // save the byte as a char
+                return 2;                       // wait for next step
+            } else {                            // if it is not an operator
+                // print error information
+                display::printErr("Invalid Operator");  
+                // wait for reinput of this round
+                return 0;                           
+            }
+        }
+
+        //-----------------------------------------------------------  
+        // inputOpB 
+        //  
+        // Purpose:  
+        //    recieve the second digit and check the validation
+        // Parameters:  
+        //    void 
+        // Returns:  
+        //    int - the next expected step   
+        // Author:  
+        //    Mingxiao An, Man Sun, Muhan Li
+        //  Rev.0 12 July 2017
+        //  Rev.1 13 July 2017
+        //  Rev.2 16 July 2017
+        //----------------------------------------------------------- 
+        int inputOpB() {
+            // read a byte from the serial monitor
+            char incomingByte = Serial.read();  
+            // if the received byte is a digit (number 0 ~ 9)       
+            if (isDigit(incomingByte)) {                
+                display::addCmd(' ');
+                display::addCmd(incomingByte);  // display it on the lcd
+                // save the byte as an integer
+                op_b = (int)(incomingByte - '0');       
+                return 3;                       // wait for next step
+            } else {                            // if it is not a digit
+                // print error information
+                display::printErr("Invalid Digit"); 
+                // wait for reinput of this round   
+                return 0;                       
+            }
+        }
+
+        //-----------------------------------------------------------  
+        // inputEqu 
+        //  
+        // Purpose:  
+        //    recieve the equality mark, check the validation and calc-
+        //    ulate the result
+        // Parameters:  
+        //    void 
+        // Returns:  
+        //    int - the next expected step   
+        // Author:  
+        //    Mingxiao An, Man Sun, Muhan Li
+        //  Rev.0 12 July 2017
+        //  Rev.1 13 July 2017
+        //  Rev.2 16 July 2017
+        //----------------------------------------------------------- 
+        int inputEqu() {
+            // read a byte from the serial monitor
+            char incomingByte = Serial.read();
+            // if the received byte is an equality mark ('=')               
+            if (incomingByte == '=') {                      
+                display::addCmd(' ');
+                display::addCmd(incomingByte);  // display it on the lcd
+                // if the calculation is invalid (divided by 0)
+                if (op_b == 0 && opr == '/') {  
+                    // print error information          
+                    display::printErr("Divided by Zero");   
+                    // wait for reinput of this round
+                    return 0;                   
+                } else {    // if input and calculation are both valid
+                    // (clac() from utils.h) calculate the answer
+                    int ans = calc(op_a, op_b, opr);        
+                    display::printAns(ans);     // display the answer           
+                    return 0;                   // wait for a new round
+                }
+            } else {                            // if the input is not '='
+                // print error information
+                display::printErr("Invalid Equ Sign");  
+                // wait for reinput of this round   
+                return 0;                                   
+            }
+        }
+    }
+}
+
+\end{minted}
+
+\subsection{phase2.cpp}
+\begin{minted}{cpp}
+//----------------------------------------------------------------
+//  Module name:
+//      phase1.cpp
+//  Languange:
+//      C++
+//  Description:
+//      The module implements the second phase in demo. It receives 
+//      user input from serial monitor following the format of two 
+//      digits, one operation symbol, two digits and one equality mark.
+//      It will print the user input and result on the lcd screen.
+//  Author:
+//      Mingxiao An, Man Sun, Muhan Li
+//  Rev.0 12 July 2017
+//  Rev.1 13 July 2017
+//  Rev.2 16 July 2017
+//----------------------------------------------------------------
+#include "Arduino.h"
+
+#include "../headers/utils.h"
+#include "../headers/display.h"
+#include "../headers/constant.h"
+
+namespace phase {
+    namespace phase2 {              // define the namespace of this phase
+        int op_a;                   // the fisrt input number
+        int op_b;                   // the second input number
+        char opr;                   // the input operation symbol
+        int step = 0;               // the current input step (0,1,2,3)
+
+        // the setup routine runs once when you press reset:
+        void setup() {
+            display::begin();       // set the lcd on a prepared state
+            prompt();               // from utils.h, print hint for input
+        }
+
+        // declare functions used for propessing input in different steps
+        int inputOpA();
+        int inputOpr();
+        int inputOpB();
+        int inputEqu();
+
+        // the loop routine runs over and over again forever:
+        void loop() {
+            if (Serial.available() > 0) {
+                switch(step) {
+                    case 0:         // first input a number of 2 digits
+                        step = inputOpA(); 
+                        break;  
+                    case 1:         // second input the operator
+                        step = inputOpr(); 
+                        break;  
+                    case 2:         // then input another 2-digit number
+                        step = inputOpB(); 
+                        break;  
+                    case 3:         // end with an equality mark
+                        step = inputEqu(); 
+                        break;  
+                }
+                if (step == 0) {    // start from the beginning
+                    prompt();       
+                }
+            }
+        }
+
+        //-----------------------------------------------------------  
+        // inputOpA 
+        //  
+        // Purpose:  
+        //    recieve the first 2-digit number and check the validation
+        // Parameters:  
+        //    void 
+        // Returns:  
+        //    int - the next expected step   
+        // Author:  
+        //    Mingxiao An, Man Sun, Muhan Li
+        //  Rev.0 12 July 2017
+        //  Rev.1 13 July 2017
+        //  Rev.2 16 July 2017
+        //-----------------------------------------------------------
+        int inputOpA() {
+            display::clear();
+            char bytes[2];          // define a buffer to store the input
+            // receive the input from serial monitor into the buffer                    
+            int result = Serial.readBytes(bytes, 2);
+            if (result != 2) {      // if the input is not 2-digit
+                //print error information
+                display::printErr("Invalid Input");
+                // wait for reinput of this round
+                return 0;
+            } else if (isDigit(bytes[0]) && isDigit(bytes[1])) {
+                // if the input is a number, print the number on lcd
+                display::addCmd(bytes[0]);
+                display::addCmd(bytes[1]);
+                // transfer the two-digit buffer into a number
+                op_a = (int)(bytes[0] - '0') * 10 + (int)(bytes[1] - '0');
+                return 1;           // wait for next step
+            } else {                // if invalid
+                // print error information
+                display::printErr("Invalid Digit");
+                // wait for reinput of this round
+                return 0;
+            }
+        }
+
+        //-----------------------------------------------------------  
+        // inputOpr 
+        //  
+        // Purpose:  
+        //    recieve the operator and check the validation
+        // Parameters:  
+        //    void 
+        // Returns:  
+        //    int - the next expected step   
+        // Author:  
+        //    Mingxiao An, Man Sun, Muhan Li
+        //  Rev.0 12 July 2017
+        //  Rev.1 13 July 2017
+        //  Rev.2 16 July 2017
+        //-----------------------------------------------------------
+        int inputOpr() {
+            // read a byte from the serial monitor
+            char incomingByte = Serial.read();
+            // if the received byte is an operator
+            if (isOpr(incomingByte)) {
+                display::addCmd(' ');
+                display::addCmd(incomingByte);  // display it on the lcd
+                opr = incomingByte;             // save the byte as a char
+                return 2;                       // wait for next step
+            } else {                            // if it is not an operator
+                //print error information
+                display::printErr("Invalid Operator");
+                // wait for reinput of this round
+                return 0;
+            }
+        }
+
+        //-----------------------------------------------------------  
+        // inputOpB 
+        //  
+        // Purpose:  
+        //    recieve the second 2-digit number and check the validation
+        // Parameters:  
+        //    void 
+        // Returns:  
+        //    int - the next expected step   
+        // Author:  
+        //    Mingxiao An, Man Sun, Muhan Li
+        //  Rev.0 12 July 2017
+        //  Rev.1 13 July 2017
+        //  Rev.2 16 July 2017
+        //-----------------------------------------------------------
+        int inputOpB() {
+            char bytes[2];          // define a buffer to store the input
+            // receive the input from serial monitor into the buffer    
+            int result = Serial.readBytes(bytes, 2);
+            if (result != 2) {      // if the input is not 2-digit
+                //print error information
+                display::printErr("Invalid Input");
+                // wait for reinput of this round
+                return 0;
+            } if (isDigit(bytes[0]) && isDigit(bytes[1])) {
+                // if the input is a number, print the number on lcd
+                display::addCmd(' ');
+                display::addCmd(bytes[0]);
+                display::addCmd(bytes[1]);
+                // transfer the two-digit buffer into a number
+                op_b = (int)(bytes[0] - '0') * 10 + (int)(bytes[1] - '0');
+                return 3;           // wait for next step
+            } else {                // if invalid
+                //print error information
+                display::printErr("Invalid Digit");
+                // wait for reinput of this round
+                return 0;
+            }
+        }
+
+        //-----------------------------------------------------------  
+        // inputEqu 
+        //  
+        // Purpose:  
+        //    recieve the equality mark, check the validation and calc-
+        //    ulate the result
+        // Parameters:  
+        //    void 
+        // Returns:  
+        //    int - the next expected step   
+        // Author:  
+        //    Mingxiao An, Man Sun, Muhan Li
+        //  Rev.0 12 July 2017
+        //  Rev.1 13 July 2017
+        //  Rev.2 16 July 2017
+        //----------------------------------------------------------- 
+        int inputEqu() {
+            // read a byte from the serial monitor
+            char incomingByte = Serial.read();
+            // if the received byte is an equality mark ('=')
+            if (incomingByte == '=') {
+                display::addCmd(' ');
+                display::addCmd(incomingByte);  // display it on the lcd
+                // if the calculation is invalid (divided by 0)
+                if (op_b == 0 && opr == '/') {
+                    //print error information
+                    display::printErr("Divided by Zero");
+                    // wait for reinput of this round
+                    return 0;
+                } else {    // if input and calculation are both valid
+                    // (clac() from utils.h) calculate the answer
+                    int ans = calc(op_a, op_b, opr);
+                    display::printAns(ans);     // display the answer
+                    return 0;                   // wait for a new round
+                }
+            } else {                            // if the input is not '='
+                //print error information
+                display::printErr("Invalid Equ Sign");
+                // wait for reinput of this round
+                return 0;
+            }
+        }
+    }
+}
+
+\end{minted}
+
+\subsection{phase3.cpp}
+\begin{minted}{cpp}
+//----------------------------------------------------------------
+//  Module name:
+//      phase1.cpp
+//  Languange:
+//      C++
+//  Description:
+//      The module implements the third phase in demo. It receives 
+//      user input from serial monitor following the format of two 
+//      digits, one operation symbol, two digits and one equality mark.
+//      The two-digit numbers can have a sign of positive or negative.
+//      It will print the user input and result on the lcd screen.
+//  Author:
+//      Mingxiao An, Man Sun, Muhan Li
+//  Rev.0 12 July 2017
+//  Rev.1 13 July 2017
+//  Rev.2 16 July 2017
+//----------------------------------------------------------------
+#include "Arduino.h"
+
+#include "../headers/utils.h"
+#include "../headers/display.h"
+#include "../headers/constant.h"
+
+namespace phase {
+    namespace phase3 {              // define the namespace of this phase
+        int op_a;                   // the fisrt input number
+        int op_b;                   // the second input number
+        char opr;                   // the input operation symbol
+        int step = 0;               // the current input step (0,1,2,3)
+
+        // the setup routine runs once when you press reset:
+        void setup() {
+            display::begin();       // set the lcd on a prepared state
+            prompt();               // from utils.h, print hint for input
+        }
+
+        // declare functions used for propessing input in different steps
+        int inputOpA();
+        int inputOpr();
+        int inputOpB();
+        int inputEqu();
+
+        // the loop routine runs over and over again forever:
+        void loop() {
+            if (Serial.available() > 0) {
+                switch(step) {      
+                    case 0:         // first input a number of 2 digits
+                        step = inputOpA(); 
+                        break;  
+                    case 1:         // second input the operator
+                        step = inputOpr(); 
+                        break;  
+                    case 2:         // then input another 2-digit number
+                        step = inputOpB(); 
+                        break;  
+                    case 3:         // end with an equality mark
+                        step = inputEqu(); 
+                        break;  
+                }
+                if (step == 0) {    // start from the beginning
+                    prompt();
+                }
+            }
+        }
+
+        //-----------------------------------------------------------  
+        // inputOpA 
+        //  
+        // Purpose:  
+        //    recieve the signed first 2-digit number and check the 
+        //    validation
+        // Parameters:  
+        //    void 
+        // Returns:  
+        //    int - the next expected step   
+        // Author:  
+        //    Mingxiao An, Man Sun, Muhan Li
+        //  Rev.0 12 July 2017
+        //  Rev.1 13 July 2017
+        //  Rev.2 16 July 2017
+        //-----------------------------------------------------------
+        int inputOpA() {
+            display::clear();
+            char bytes[3];          // define a buffer to store the input
+            // receive the input from serial monitor into the buffer
+            int result = Serial.readBytes(bytes, 3);
+            if (result == 2) {      // if the input is 2-digit
+                // if the input is a positive number
+                if (isDigit(bytes[0]) && isDigit(bytes[1])) {
+                    // print the number on lcd
+                    display::addCmd(bytes[0]);
+                    display::addCmd(bytes[1]);
+                    // transfer the 3-digit buffer into a number
+                    op_a = (int)(bytes[0] - '0') * 10 + (int)(bytes[1] - '0');
+                    return 1;       // wait for next step
+                } else {            // if invalid
+                    // print error information
+                    display::printErr("Invalid Digit");
+                    // wait for reinput of this round
+                    return 0;
+                }
+            } else if (result == 3) {// if the input is 3-digit
+                // if the input is a negative number
+                if (bytes[0] == '-' && isDigit(bytes[1]) && isDigit(bytes[2])) {
+                    // print the number on lcd
+                    display::addCmd(bytes[0]);
+                    display::addCmd(bytes[1]);
+                    display::addCmd(bytes[2]);
+                    // transfer the 3-digit buffer into a number
+                    op_a = -(int)(bytes[1] - '0') * 10 - (int)(bytes[2] - '0');
+                    return 1;       // wait for next step
+                }
+            } else {                // if invalid
+                // print error information
+                display::printErr("Invalid Input");
+                // wait for reinput of this round
+                return 0;
+            }
+        }
+
+        //-----------------------------------------------------------  
+        // inputOpr 
+        //  
+        // Purpose:  
+        //    recieve the operator and check the validation
+        // Parameters:  
+        //    void 
+        // Returns:  
+        //    int - the next expected step   
+        // Author:  
+        //    Mingxiao An, Man Sun, Muhan Li
+        //  Rev.0 12 July 2017
+        //  Rev.1 13 July 2017
+        //  Rev.2 16 July 2017
+        //-----------------------------------------------------------
+        int inputOpr() {
+            // read a byte from the serial monitor
+            char incomingByte = Serial.read();
+            // if the received byte is an operator
+            if (isOpr(incomingByte)) {
+                display::addCmd(' ');
+                display::addCmd(incomingByte);  // display it on the lcd
+                opr = incomingByte;             // save the byte as a char
+                return 2;                       // wait for next step
+            } else {                            // if it is not an operator
+                //print error information
+                display::printErr("Invalid Operator");
+                // wait for reinput of this round
+                return 0;
+            }
+        }
+
+        //-----------------------------------------------------------  
+        // inputOpB 
+        //  
+        // Purpose:  
+        //    recieve the signed second 2-digit number and check the validation
+        // Parameters:  
+        //    void 
+        // Returns:  
+        //    int - the next expected step   
+        // Author:  
+        //    Mingxiao An, Man Sun, Muhan Li
+        //  Rev.0 12 July 2017
+        //  Rev.1 13 July 2017
+        //  Rev.2 16 July 2017
+        //-----------------------------------------------------------
+        int inputOpB() {
+            char bytes[3];          // define a buffer to store the input
+            // receive the input from serial monitor into the buffer
+            int result = Serial.readBytes(bytes, 3);
+            if (result == 2) {
+                // if the input is a positive number
+                if (isDigit(bytes[0]) && isDigit(bytes[1])) {
+                    // print the number on lcd
+                    display::addCmd(' ');
+                    display::addCmd(bytes[0]);
+                    display::addCmd(bytes[1]);
+                    // transfer the 3-digit buffer into a number
+                    op_b = (int)(bytes[0] - '0') * 10 + (int)(bytes[1] - '0');
+                    return 3;       // wait for next step
+                } else {
+                    // print error information
+                    display::printErr("Invalid Digit");
+                    // wait for reinput of this round
+                    return 0;
+                }
+            } else if (result == 3) {
+                // if the input is a negative number
+                if (bytes[0] == '-' && isDigit(bytes[1]) && isDigit(bytes[2])) {
+                    // print the number on lcd
+                    display::addCmd(' ');
+                    display::addCmd(bytes[0]);
+                    display::addCmd(bytes[1]);
+                    display::addCmd(bytes[2]);
+                    // transfer the 3-digit buffer into a number
+                    op_b = -(int)(bytes[1] - '0') * 10 - (int)(bytes[2] - '0');
+                    return 3;       // wait for next step
+                }
+            } else {
+                // print error information
+                display::printErr("Invalid Input");
+                // wait for reinput of this round
+                return 0;
+            }
+        }
+
+        //-----------------------------------------------------------  
+        // inputEqu 
+        //  
+        // Purpose:  
+        //    recieve the equality mark, check the validation and calc-
+        //    ulate the result
+        // Parameters:  
+        //    void 
+        // Returns:  
+        //    int - the next expected step   
+        // Author:  
+        //    Mingxiao An, Man Sun, Muhan Li
+        //  Rev.0 12 July 2017
+        //  Rev.1 13 July 2017
+        //  Rev.2 16 July 2017
+        //----------------------------------------------------------- 
+        int inputEqu() {
+            // read a byte from the serial monitor
+            char incomingByte = Serial.read();
+            // if the received byte is an equality mark ('=')
+            if (incomingByte == '=') {
+                display::addCmd(' ');
+                display::addCmd(incomingByte);  // display it on the lcd
+                if (op_b == 0 && opr == '/') {
+                    // print error information
+                    display::printErr("Divided by Zero");
+                    // wait for reinput of this round
+                    return 0;
+                } else {    // if input and calculation are both valid
+                    // (clac() from utils.h) calculate the answer
+                    int ans = calc(op_a, op_b, opr);
+                    display::printAns(ans);     // display the answer
+                    return 0;                   // wait for a new round
+                }
+            } else {                            // if the input is not '='
+                // print error information
+                display::printErr("Invalid Equ Sign");
+                // wait for reinput of this round
+                return 0;
+            }
+        }
+    }
+}
+
+\end{minted}
+
+\subsection{phase4.cpp}
+\begin{minted}{cpp}
+//----------------------------------------------------------------
+//  Module name:
+//      phase1.cpp
+//  Languange:
+//      C++
+//  Description:
+//      The module implements the forth phase in demo. The master
+//      gets input and controls the slave to output based on the
+//      third phase.
+//  Author:
+//      Mingxiao An, Man Sun, Muhan Li
+//  Rev.0 12 July 2017
+//  Rev.1 13 July 2017
+//  Rev.2 16 July 2017
+//  Rev.3 17 July 2017
+//----------------------------------------------------------------
+
+#include "Arduino.h"
+#include "Wire.h"
+
+#include "../headers/utils.h"
+#include "../headers/command.h"
+#include "../headers/display.h"
+#include "../headers/constant.h"
+
+namespace phase {   
+    namespace phase4 {
+    
+        #if MASTER == 1
+
+        // the setup routine runs once when you press reset:
+        void setup() {
+            Wire.begin();
+            prompt();
+        }
+
+        int op_a;                   // the fisrt input number
+        int op_b;                   // the second input number
+        char opr;                   // the input operation symbol
+        int step = 0;               // the current input step (0,1,2,3)
+
+        // declare functions used for propessing input in different steps
+        int inputOpA();
+        int inputOpr();
+        int inputOpB();
+        int inputEqu();
+
+        // the loop routine runs over and over again forever:
+        void loop() {
+            if (Serial.available() > 0) {
+                switch(step) {      
+                    case 0:         // first input a signed number of 2 digits
+                        step = inputOpA(); 
+                        break;  
+                    case 1:         // second input the operator
+                        step = inputOpr(); 
+                        break;  
+                    case 2:         // then input another 2-digit signed number
+                        step = inputOpB(); 
+                        break;  
+                    case 3:         // end with an equality mark
+                        step = inputEqu(); 
+                        break;  
+                }
+                if (step == 0) {    // start from the beginning
+                    prompt();
+                }
+            }
+        }
+
+        //-----------------------------------------------------------  
+        // inputOpA 
+        //  
+        // Purpose:  
+        //    recieve the signed first 2-digit number and check the 
+        //    validation
+        // Parameters:  
+        //    void 
+        // Returns:  
+        //    int - the next expected step   
+        // Author:  
+        //    Mingxiao An, Man Sun, Muhan Li
+        //  Rev.0 12 July 2017
+        //  Rev.1 13 July 2017
+        //  Rev.2 16 July 2017
+        //  Rev.3 17 July 2017
+        //-----------------------------------------------------------
+        int inputOpA() {
+            command::clear();
+            char bytes[3];          // define a buffer to store the input
+            // receive the input from serial monitor into the buffer
+            int result = Serial.readBytes(bytes, 3);
+            if (result == 2) {      // if the input is 2-digit
+                // if the input is a positive number
+                if (isDigit(bytes[0]) && isDigit(bytes[1])) {
+                    // print the number on the remote lcd
+                    command::addCmd(bytes[0]);
+                    command::addCmd(bytes[1]);
+                    // transfer the 3-digit buffer into a number
+                    op_a = (int)(bytes[0] - '0') * 10 + (int)(bytes[1] - '0');
+                    return 1;       // wait for next step
+                } else {            // if invalid
+                    // print error information
+                    command::printErr("Invalid Digit");
+                    // wait for reinput of this round
+                    return 0;
+                }
+            } else if (result == 3) {// if the input is 3-digit
+                // if the input is a negative number
+                if (bytes[0] == '-' && isDigit(bytes[1]) && isDigit(bytes[2])) {
+                    // print the number on the remote lcd
+                    command::addCmd(bytes[0]);
+                    command::addCmd(bytes[1]);
+                    command::addCmd(bytes[2]);
+                    // transfer the 3-digit buffer into a number
+                    op_a = -(int)(bytes[1] - '0') * 10 - (int)(bytes[2] - '0');
+                    return 1;       // wait for next step
+                }
+            } else {                // if invalid
+                // print error information
+                command::printErr("Invalid Input");
+                // wait for reinput of this round
+                return 0;
+            }
+        }
+
+        //-----------------------------------------------------------  
+        // inputOpr 
+        //  
+        // Purpose:  
+        //    recieve the operator and check the validation
+        // Parameters:  
+        //    void 
+        // Returns:  
+        //    int - the next expected step   
+        // Author:  
+        //    Mingxiao An, Man Sun, Muhan Li
+        //  Rev.0 12 July 2017
+        //  Rev.1 13 July 2017
+        //  Rev.2 16 July 2017
+        //  Rev.3 17 July 2017
+        //-----------------------------------------------------------
+        int inputOpr() {
+            // read a byte from the serial monitor
+            char incomingByte = Serial.read();
+            // if the received byte is an operator
+            if (isOpr(incomingByte)) {
+                command::addCmd(' ');
+                command::addCmd(incomingByte);  // display it on the remote lcd
+                opr = incomingByte;             // save the byte as a char
+                return 2;                       // wait for next step
+            } else {                            // if it is not an operator
+                // print error information
+                command::printErr("Invalid Operator");
+                // wait for reinput of this round
+                return 0;
+            }
+        }
+
+        //-----------------------------------------------------------  
+        // inputOpB 
+        //  
+        // Purpose:  
+        //    recieve the signed second 2-digit number and check the validation
+        // Parameters:  
+        //    void 
+        // Returns:  
+        //    int - the next expected step   
+        // Author:  
+        //    Mingxiao An, Man Sun, Muhan Li
+        //  Rev.0 12 July 2017
+        //  Rev.1 13 July 2017
+        //  Rev.2 16 July 2017
+        //  Rev.3 17 July 2017
+        //-----------------------------------------------------------
+        int inputOpB() {
+            char bytes[3];          // define a buffer to store the input
+            // receive the input from serial monitor into the buffer
+            int result = Serial.readBytes(bytes, 3);
+            if (result == 2) {
+                // if the input is a positive number
+                if (isDigit(bytes[0]) && isDigit(bytes[1])) {
+                    // print the number on the remote lcd
+                    command::addCmd(' ');
+                    command::addCmd(bytes[0]);
+                    command::addCmd(bytes[1]);
+                    // transfer the 3-digit buffer into a number
+                    op_b = (int)(bytes[0] - '0') * 10 + (int)(bytes[1] - '0');
+                    return 3;       // wait for next step
+                } else {
+                    // print error information
+                    command::printErr("Invalid Digit");
+                    // wait for reinput of this round
+                    return 0;
+                }
+            } else if (result == 3) {
+                // if the input is a negative number
+                if (bytes[0] == '-' && isDigit(bytes[1]) && isDigit(bytes[2])) {
+                    // print the number on the remote lcd
+                    command::addCmd(' ');
+                    command::addCmd(bytes[0]);
+                    command::addCmd(bytes[1]);
+                    command::addCmd(bytes[2]);
+                    // transfer the 3-digit buffer into a number
+                    op_b = -(int)(bytes[1] - '0') * 10 - (int)(bytes[2] - '0');
+                    return 3;       // wait for next step
+                }
+            } else {
+                // print error information
+                command::printErr("Invalid Input");
+                // wait for reinput of this round
+                return 0;
+            }
+        }
+
+        //-----------------------------------------------------------  
+        // inputEqu 
+        //  
+        // Purpose:  
+        //    recieve the equality mark, check the validation and calc-
+        //    ulate the result
+        // Parameters:  
+        //    void 
+        // Returns:  
+        //    int - the next expected step   
+        // Author:  
+        //    Mingxiao An, Man Sun, Muhan Li
+        //  Rev.0 12 July 2017
+        //  Rev.1 13 July 2017
+        //  Rev.2 16 July 2017
+        //  Rev.3 17 July 2017
+        //----------------------------------------------------------- 
+        int inputEqu() {
+            // read a byte from the serial monitor
+            char incomingByte = Serial.read();
+            // if the received byte is an equality mark ('=')
+            if (incomingByte == '=') {
+                command::addCmd(' ');
+                command::addCmd(incomingByte);  // display it on the remote lcd
+                if (op_b == 0 && opr == '/') {
+                    // print error information
+                    command::printErr("Divided by Zero");
+                    // wait for reinput of this round
+                    return 0;
+                } else {    // if input and calculation are both valid
+                    // (clac() from utils.h) calculate the answer
+                    int ans = calc(op_a, op_b, opr);
+                    command::printAns(ans);     // display the answer
+                    return 0;                   // wait for a new round
+                }
+            } else {                            // if the input is not '='
+                // print error information
+                command::printErr("Invalid Equ Sign");
+                // wait for reinput of this round
+                return 0;
+            }
+        }
+        
+
+        #else
+
+        // the setup routine runs once when you press reset:
+        void setup() {
+            display::begin();
+            Wire.begin(I2C_PORT);                   // join i2c bus
+            Wire.onReceive(command::receiveEvent);  // register event
+            Serial.println("finished setup");       // print the hint   
+        }
+
+        // the loop routine runs over and over again forever:
+        void loop() {
+            delay(100);
+        }
+
+        #endif  // MASTER
+    }
+}
 
 \end{minted}

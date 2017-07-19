@@ -1,0 +1,65 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{//\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+\PYG{c+c1}{//  Module name:}
+\PYG{c+c1}{//      phase.h}
+\PYG{c+c1}{//  Languange:}
+\PYG{c+c1}{//      C++}
+\PYG{c+c1}{//  Description:}
+\PYG{c+c1}{//      This header provides options for different useages of this}
+\PYG{c+c1}{//      module, including three demo phases.}
+\PYG{c+c1}{//  Author:}
+\PYG{c+c1}{//      Mingxiao An, Man Sun, Muhan Li}
+\PYG{c+c1}{//  Rev.0 12 July 2017}
+\PYG{c+c1}{//  Rev.1 13 July 2017}
+\PYG{c+c1}{//  Rev.2 16 July 2017}
+\PYG{c+c1}{//\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+\PYG{c+cp}{\PYGZsh{}ifndef PHASE\PYGZus{}H}
+\PYG{c+cp}{\PYGZsh{}define PHASE\PYGZus{}H}
+
+\PYG{k}{namespace} \PYG{n}{phase} \PYG{p}{\PYGZob{}}
+
+    \PYG{k}{namespace} \PYG{n}{phase1} \PYG{p}{\PYGZob{}}
+        \PYG{k+kt}{void} \PYG{n}{setup}\PYG{p}{();}
+        \PYG{k+kt}{void} \PYG{n+nf}{loop}\PYG{p}{();}
+    \PYG{p}{\PYGZcb{}}
+
+    \PYG{k}{namespace} \PYG{n}{phase2} \PYG{p}{\PYGZob{}}
+        \PYG{k+kt}{void} \PYG{n}{setup}\PYG{p}{();}
+        \PYG{k+kt}{void} \PYG{n+nf}{loop}\PYG{p}{();}
+    \PYG{p}{\PYGZcb{}}
+
+    \PYG{k}{namespace} \PYG{n}{phase3} \PYG{p}{\PYGZob{}}
+        \PYG{k+kt}{void} \PYG{n}{setup}\PYG{p}{();}
+        \PYG{k+kt}{void} \PYG{n+nf}{loop}\PYG{p}{();}
+    \PYG{p}{\PYGZcb{}}
+
+    \PYG{k}{namespace} \PYG{n}{phase4} \PYG{p}{\PYGZob{}}
+        \PYG{k+kt}{void} \PYG{n}{setup}\PYG{p}{();}
+        \PYG{k+kt}{void} \PYG{n+nf}{loop}\PYG{p}{();}
+    \PYG{p}{\PYGZcb{}}
+
+    \PYG{c+cp}{\PYGZsh{}if PHASE == 1}
+
+    \PYG{k}{using} \PYG{n}{phase1}\PYG{o}{::}\PYG{n}{setup}\PYG{p}{;}
+    \PYG{k}{using} \PYG{n}{phase1}\PYG{o}{::}\PYG{n}{loop}\PYG{p}{;}
+
+    \PYG{c+cp}{\PYGZsh{}elif PHASE == 2}
+
+    \PYG{k}{using} \PYG{n}{phase2}\PYG{o}{::}\PYG{n}{setup}\PYG{p}{;}
+    \PYG{k}{using} \PYG{n}{phase2}\PYG{o}{::}\PYG{n}{loop}\PYG{p}{;}
+
+    \PYG{c+cp}{\PYGZsh{}elif PHASE == 3}
+
+    \PYG{k}{using} \PYG{n}{phase3}\PYG{o}{::}\PYG{n}{setup}\PYG{p}{;}
+    \PYG{k}{using} \PYG{n}{phase3}\PYG{o}{::}\PYG{n}{loop}\PYG{p}{;}
+
+    \PYG{c+cp}{\PYGZsh{}elif PHASE == 4}
+
+    \PYG{k}{using} \PYG{n}{phase4}\PYG{o}{::}\PYG{n}{setup}\PYG{p}{;}
+    \PYG{k}{using} \PYG{n}{phase4}\PYG{o}{::}\PYG{n}{loop}\PYG{p}{;}
+
+    \PYG{c+cp}{\PYGZsh{}endif  }\PYG{c+c1}{// PHASE}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{c+cp}{\PYGZsh{}endif  }\PYG{c+c1}{// PHASE\PYGZus{}H}
+\end{Verbatim}

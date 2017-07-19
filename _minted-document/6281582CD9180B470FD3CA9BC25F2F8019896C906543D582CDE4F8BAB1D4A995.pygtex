@@ -1,0 +1,168 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{//\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+\PYG{c+c1}{//  Module name:}
+\PYG{c+c1}{//      display.cpp}
+\PYG{c+c1}{//  Languange:}
+\PYG{c+c1}{//      C++}
+\PYG{c+c1}{//  Description:}
+\PYG{c+c1}{//      This header defines functions for commands used for i2c transfer,}
+\PYG{c+c1}{//      including addCmd(), printErr(), printAns() and clear(), as well}
+\PYG{c+c1}{//      as the event reciever.}
+\PYG{c+c1}{//  Author:}
+\PYG{c+c1}{//      Mingxiao An, Man Sun, Muhan Li}
+\PYG{c+c1}{//  Rev.0 12 July 2017}
+\PYG{c+c1}{//  Rev.1 13 July 2017}
+\PYG{c+c1}{//  Rev.2 16 July 2017}
+\PYG{c+c1}{//  Rev.3 17 July 2017}
+\PYG{c+c1}{//\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZdq{}Arduino.h\PYGZdq{}}
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZdq{}Wire.h\PYGZdq{}}
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZdq{}../headers/constant.h\PYGZdq{}}
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZdq{}../headers/command.h\PYGZdq{}}
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZdq{}../headers/display.h\PYGZdq{}}
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZdq{}string.h\PYGZdq{}}
+
+\PYG{k}{namespace} \PYG{n}{command} \PYG{p}{\PYGZob{}}
+    \PYG{c+c1}{//\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+    \PYG{c+c1}{// addCmd}
+    \PYG{c+c1}{//}
+    \PYG{c+c1}{// Purpose:}
+    \PYG{c+c1}{//    add one character to the remote lcd as input}
+    \PYG{c+c1}{// Parameters:}
+    \PYG{c+c1}{//    [in] char \PYGZhy{} the character to be sent to the remote lcd}
+    \PYG{c+c1}{// Returns:}
+    \PYG{c+c1}{//    void}
+    \PYG{c+c1}{// Author:}
+    \PYG{c+c1}{//    Mingxiao An, Man Sun, Muhan Li}
+    \PYG{c+c1}{//  Rev.0 12 July 2017}
+    \PYG{c+c1}{//  Rev.1 13 July 2017}
+    \PYG{c+c1}{//  Rev.2 16 July 2017}
+    \PYG{c+c1}{//  Rev.3 17 July 2017}
+    \PYG{c+c1}{//\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+    \PYG{k+kt}{void} \PYG{n}{addCmd}\PYG{p}{(}\PYG{k+kt}{char} \PYG{n}{cmd}\PYG{p}{)} \PYG{p}{\PYGZob{}}
+        \PYG{n}{Wire}\PYG{p}{.}\PYG{n}{beginTransmission}\PYG{p}{(}\PYG{n}{I2C\PYGZus{}PORT}\PYG{p}{);}   \PYG{c+c1}{// start transmitting}
+        \PYG{n}{Wire}\PYG{p}{.}\PYG{n}{write}\PYG{p}{(}\PYG{n}{Command}\PYG{o}{::}\PYG{n}{ADDCMD}\PYG{p}{);}        \PYG{c+c1}{// send the addcmd command}
+        \PYG{n}{Wire}\PYG{p}{.}\PYG{n}{write}\PYG{p}{(}\PYG{n}{cmd}\PYG{p}{);}                    \PYG{c+c1}{// send the cmd to output}
+        \PYG{n}{Wire}\PYG{p}{.}\PYG{n}{endTransmission}\PYG{p}{();}             \PYG{c+c1}{// stop transmitting}
+        \PYG{n}{Serial}\PYG{p}{.}\PYG{n}{print}\PYG{p}{(}\PYG{n}{cmd}\PYG{p}{);}                  \PYG{c+c1}{// echo the output to monitor}
+    \PYG{p}{\PYGZcb{}}
+
+    \PYG{c+c1}{//\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+    \PYG{c+c1}{// printErr}
+    \PYG{c+c1}{//}
+    \PYG{c+c1}{// Purpose:}
+    \PYG{c+c1}{//    send error information to the remote lcd}
+    \PYG{c+c1}{// Parameters:}
+    \PYG{c+c1}{//    [in] char* \PYGZhy{} the char array (contains error info) to be}
+    \PYG{c+c1}{//                 sent to the remote lcd}
+    \PYG{c+c1}{// Returns:}
+    \PYG{c+c1}{//    void}
+    \PYG{c+c1}{// Author:}
+    \PYG{c+c1}{//    Mingxiao An, Man Sun, Muhan Li}
+    \PYG{c+c1}{//  Rev.0 12 July 2017}
+    \PYG{c+c1}{//  Rev.1 13 July 2017}
+    \PYG{c+c1}{//  Rev.2 16 July 2017}
+    \PYG{c+c1}{//  Rev.3 17 July 2017}
+    \PYG{c+c1}{//\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+    \PYG{k+kt}{void} \PYG{n}{printErr}\PYG{p}{(}\PYG{k+kt}{char} \PYG{k}{const}\PYG{o}{*} \PYG{n}{err}\PYG{p}{)} \PYG{p}{\PYGZob{}}
+        \PYG{n}{Wire}\PYG{p}{.}\PYG{n}{beginTransmission}\PYG{p}{(}\PYG{n}{I2C\PYGZus{}PORT}\PYG{p}{);}   \PYG{c+c1}{// start transmitting}
+        \PYG{n}{Wire}\PYG{p}{.}\PYG{n}{write}\PYG{p}{(}\PYG{n}{Command}\PYG{o}{::}\PYG{n}{PRINTERR}\PYG{p}{);}      \PYG{c+c1}{// send the printerr command}
+        \PYG{n}{Wire}\PYG{p}{.}\PYG{n}{write}\PYG{p}{(}\PYG{n}{err}\PYG{p}{,} \PYG{n}{strlen}\PYG{p}{(}\PYG{n}{err}\PYG{p}{));}       \PYG{c+c1}{// send the error info}
+        \PYG{n}{Wire}\PYG{p}{.}\PYG{n}{endTransmission}\PYG{p}{();}             \PYG{c+c1}{// stop transmitting}
+        \PYG{n}{Serial}\PYG{p}{.}\PYG{n}{println}\PYG{p}{();}
+        \PYG{n}{Serial}\PYG{p}{.}\PYG{n}{println}\PYG{p}{(}\PYG{n}{err}\PYG{p}{);}                \PYG{c+c1}{// echo the output to monitor}
+    \PYG{p}{\PYGZcb{}}
+
+    \PYG{c+c1}{//\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+    \PYG{c+c1}{// printAns}
+    \PYG{c+c1}{//}
+    \PYG{c+c1}{// Purpose:}
+    \PYG{c+c1}{//    send the result to the remote lcd}
+    \PYG{c+c1}{// Parameters:}
+    \PYG{c+c1}{//    [in] int \PYGZhy{} the result to be sent to the remote lcd}
+    \PYG{c+c1}{// Returns:}
+    \PYG{c+c1}{//    void}
+    \PYG{c+c1}{// Author:}
+    \PYG{c+c1}{//    Mingxiao An, Man Sun, Muhan Li}
+    \PYG{c+c1}{//  Rev.0 12 July 2017}
+    \PYG{c+c1}{//  Rev.1 13 July 2017}
+    \PYG{c+c1}{//  Rev.2 16 July 2017}
+    \PYG{c+c1}{//  Rev.3 17 July 2017}
+    \PYG{c+c1}{//\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+    \PYG{k+kt}{void} \PYG{n}{printAns}\PYG{p}{(}\PYG{k+kt}{int} \PYG{n}{ans}\PYG{p}{)} \PYG{p}{\PYGZob{}}
+        \PYG{k+kt}{char} \PYG{n}{buf}\PYG{p}{[}\PYG{l+m+mi}{32}\PYG{p}{];}
+        \PYG{n}{sprintf}\PYG{p}{(}\PYG{n}{buf}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}\PYGZpc{}d\PYGZdq{}}\PYG{p}{,} \PYG{n}{ans}\PYG{p}{);}
+        \PYG{n}{Wire}\PYG{p}{.}\PYG{n}{beginTransmission}\PYG{p}{(}\PYG{n}{I2C\PYGZus{}PORT}\PYG{p}{);}   \PYG{c+c1}{// start transmitting}
+        \PYG{n}{Wire}\PYG{p}{.}\PYG{n}{write}\PYG{p}{(}\PYG{n}{Command}\PYG{o}{::}\PYG{n}{PRINTANS}\PYG{p}{);}      \PYG{c+c1}{// send the printans command}
+        \PYG{n}{Wire}\PYG{p}{.}\PYG{n}{write}\PYG{p}{(}\PYG{n}{buf}\PYG{p}{,} \PYG{n}{strlen}\PYG{p}{(}\PYG{n}{buf}\PYG{p}{));}       \PYG{c+c1}{// send the answer}
+        \PYG{n}{Wire}\PYG{p}{.}\PYG{n}{endTransmission}\PYG{p}{();}             \PYG{c+c1}{// stop transmitting}
+        \PYG{n}{Serial}\PYG{p}{.}\PYG{n}{println}\PYG{p}{(}\PYG{n}{ans}\PYG{p}{);}                \PYG{c+c1}{// echo the output to monitor}
+    \PYG{p}{\PYGZcb{}}
+
+    \PYG{c+c1}{//\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+    \PYG{c+c1}{// clear}
+    \PYG{c+c1}{//}
+    \PYG{c+c1}{// Purpose:}
+    \PYG{c+c1}{//    clear and initialize the remote lcd}
+    \PYG{c+c1}{// Parameters:}
+    \PYG{c+c1}{//    void}
+    \PYG{c+c1}{// Returns:}
+    \PYG{c+c1}{//    void}
+    \PYG{c+c1}{// Author:}
+    \PYG{c+c1}{//    Mingxiao An, Man Sun, Muhan Li}
+    \PYG{c+c1}{//  Rev.0 12 July 2017}
+    \PYG{c+c1}{//  Rev.1 13 July 2017}
+    \PYG{c+c1}{//  Rev.2 16 July 2017}
+    \PYG{c+c1}{//  Rev.3 17 July 2017}
+    \PYG{c+c1}{//\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+    \PYG{k+kt}{void} \PYG{n}{clear}\PYG{p}{()} \PYG{p}{\PYGZob{}}
+        \PYG{n}{Wire}\PYG{p}{.}\PYG{n}{beginTransmission}\PYG{p}{(}\PYG{n}{I2C\PYGZus{}PORT}\PYG{p}{);}   \PYG{c+c1}{// start transmitting}
+        \PYG{n}{Wire}\PYG{p}{.}\PYG{n}{write}\PYG{p}{(}\PYG{n}{Command}\PYG{o}{::}\PYG{n}{CLEAR}\PYG{p}{);}         \PYG{c+c1}{// send the clear command}
+        \PYG{n}{Wire}\PYG{p}{.}\PYG{n}{endTransmission}\PYG{p}{();}             \PYG{c+c1}{// stop transmitting}
+    \PYG{p}{\PYGZcb{}}
+
+    \PYG{c+c1}{//\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+    \PYG{c+c1}{// receiveEvent}
+    \PYG{c+c1}{//}
+    \PYG{c+c1}{// Purpose:}
+    \PYG{c+c1}{//    receive a command from a remote cmd and execute it,}
+    \PYG{c+c1}{//    registered as an event.}
+    \PYG{c+c1}{// Parameters:}
+    \PYG{c+c1}{//    [in] int \PYGZhy{} the number of the bytes that need to be received,}
+    \PYG{c+c1}{//               this input is managed by Wire.}
+    \PYG{c+c1}{// Returns:}
+    \PYG{c+c1}{//    void}
+    \PYG{c+c1}{// Author:}
+    \PYG{c+c1}{//    Mingxiao An, Man Sun, Muhan Li}
+    \PYG{c+c1}{//  Rev.0 12 July 2017}
+    \PYG{c+c1}{//  Rev.1 13 July 2017}
+    \PYG{c+c1}{//  Rev.2 16 July 2017}
+    \PYG{c+c1}{//  Rev.3 17 July 2017}
+    \PYG{c+c1}{//\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+    \PYG{c+c1}{// this function is registered as an event:}
+    \PYG{k+kt}{void} \PYG{n}{receiveEvent}\PYG{p}{(}\PYG{k+kt}{int} \PYG{n}{numBytes}\PYG{p}{)} \PYG{p}{\PYGZob{}}
+        \PYG{k+kt}{char} \PYG{n}{ch}\PYG{p}{;}                            \PYG{c+c1}{// input char from remote lcd}
+        \PYG{k+kt}{char} \PYG{n}{buf}\PYG{p}{[}\PYG{l+m+mi}{32}\PYG{p}{];}                       \PYG{c+c1}{// store the input command}
+        \PYG{n}{Command} \PYG{n}{cmd} \PYG{o}{=} \PYG{p}{(}\PYG{n}{Command}\PYG{p}{)}\PYG{n}{Wire}\PYG{p}{.}\PYG{n}{read}\PYG{p}{();} \PYG{c+c1}{// read the first char}
+        \PYG{n}{numBytes} \PYG{o}{\PYGZhy{}=} \PYG{l+m+mi}{1}\PYG{p}{;}                      \PYG{c+c1}{// remained length decreased}
+        \PYG{k}{switch} \PYG{p}{(}\PYG{n}{cmd}\PYG{p}{)} \PYG{p}{\PYGZob{}}                      \PYG{c+c1}{// recognize the command}
+            \PYG{k}{case} \PYG{n}{Command}\PYG{o}{::}\PYG{n+nl}{ADDCMD}\PYG{p}{:}           \PYG{c+c1}{// display a char (1st row)}
+                \PYG{n}{ch} \PYG{o}{=} \PYG{n}{Wire}\PYG{p}{.}\PYG{n}{read}\PYG{p}{();}           \PYG{c+c1}{// read one char from Wire}
+                \PYG{n}{display}\PYG{o}{::}\PYG{n}{addCmd}\PYG{p}{(}\PYG{n}{ch}\PYG{p}{);}        \PYG{c+c1}{// display the char on lcd}
+                \PYG{k}{break}\PYG{p}{;}
+            \PYG{k}{case} \PYG{n}{Command}\PYG{o}{::}\PYG{n+nl}{PRINTANS}\PYG{p}{:}         \PYG{c+c1}{// display answer (2nd row)}
+            \PYG{k}{case} \PYG{n}{Command}\PYG{o}{::}\PYG{n+nl}{PRINTERR}\PYG{p}{:}         \PYG{c+c1}{// display error (2nd row)}
+                \PYG{k}{for} \PYG{p}{(}\PYG{k+kt}{int} \PYG{n}{i} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{;} \PYG{n}{i} \PYG{o}{\PYGZlt{}} \PYG{n}{numBytes}\PYG{p}{;} \PYG{n}{i}\PYG{o}{++}\PYG{p}{)} \PYG{p}{\PYGZob{}}
+                    \PYG{n}{buf}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]} \PYG{o}{=} \PYG{n}{Wire}\PYG{p}{.}\PYG{n}{read}\PYG{p}{();}   \PYG{c+c1}{// read all the remaining}
+                \PYG{p}{\PYGZcb{}}                           \PYG{c+c1}{// char one by one}
+                \PYG{n}{buf}\PYG{p}{[}\PYG{n}{numBytes}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+sc}{\PYGZsq{}\PYGZbs{}0\PYGZsq{}}\PYG{p}{;}       \PYG{c+c1}{// add a null char in the end}
+                \PYG{n}{display}\PYG{o}{::}\PYG{n}{printErr}\PYG{p}{(}\PYG{n}{buf}\PYG{p}{);}     \PYG{c+c1}{// display the error on lcd}
+                \PYG{k}{break}\PYG{p}{;}
+            \PYG{k}{case} \PYG{n}{Command}\PYG{o}{::}\PYG{n+nl}{CLEAR}\PYG{p}{:}            \PYG{c+c1}{// clear and initialize lcd}
+                \PYG{n}{display}\PYG{o}{::}\PYG{n}{clear}\PYG{p}{();}           \PYG{c+c1}{// clear and initialize lcd}
+                \PYG{k}{break}\PYG{p}{;}
+        \PYG{p}{\PYGZcb{}}
+    \PYG{p}{\PYGZcb{}}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}
