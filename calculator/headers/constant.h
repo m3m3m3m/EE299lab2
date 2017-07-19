@@ -21,5 +21,5 @@
 #define I2C_PORT 	4					// analog port for i2c bus
 #define PHASE		4					// when phase is 0, the code goes to test
 #define TEST 		1					// the test code No.
-#define MASTER		2					// 1 for MASTER, 2 for SLAVE
+#define MASTER		1					// 1 for MASTER, 2 for SLAVE
 #endif	// CONSTANT_H

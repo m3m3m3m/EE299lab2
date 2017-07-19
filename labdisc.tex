@@ -29,8 +29,8 @@ We take three inputs in this part, two integer numbers and a character represent
 The master Arduino processor will send the calculation result and error information along with a specified command as the first character through Wire to the slave Arduino processor. The salve processor takes the first character to recognize the type of command. If the command is to display the input, display the next char on the first row of its LCD screen. If the command is to display the result or error information, display the remaining characters on the second row of its LCD screen.
 
 \subsection{Hardware Implementation}
-See figure[\ref{fig:schm}].\\
-\begin{figure}
+See figure[\ref{fig:schm}].
+\begin{figure}[!htbp]
 	\centering
 	\includegraphics[width = \linewidth]{images/schem.png}
 	\caption{Schematic of hardware implementation(developed using Fritzing)}
@@ -38,4 +38,10 @@ See figure[\ref{fig:schm}].\\
 \end{figure}
 
 \subsection{Software Implementation}
-%TODO
+See figure[\ref{fig:flow}].
+\begin{figure}[!htbp]
+	\centering
+	\includegraphics[width = \linewidth]{images/flow_chart.png}
+	\caption{The flow of control}
+	\label{fig:flow}
+\end{figure}
